@@ -20,7 +20,7 @@ package
 		public var levelindex:int = -1;
 		public var level:Level;
 		public var levels:Array = [
-			'../levels/test_level/'
+			'../levels/level01/'
 		];
 	
 		public static var healthbar:MovieClip;
