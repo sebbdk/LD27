@@ -1,13 +1,13 @@
 package dk.sebb.tiled.mobs.creatures
 {
-	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.ui.Keyboard;
+	import flash.utils.getTimer;
 	
+	import Anim.Battery;
 	import Anim.Twirl;
 	
 	import dk.sebb.tiled.Level;
-	import dk.sebb.tiled.mobs.ObjMob;
 	import dk.sebb.tiled.mobs.TileMob;
 	import dk.sebb.util.AStar;
 	import dk.sebb.util.Cell;
@@ -27,6 +27,8 @@ package dk.sebb.tiled.mobs.creatures
 		public var direction:Vec2 = new Vec2();
 		public var currentAnimation:String = "down";
 		public var mapPos:Vec2 = new Vec2();
+		public var _health:int = 3;
+		public var lastHit:int = 0;
 		
 		public function Player()
 		{
@@ -39,6 +41,37 @@ package dk.sebb.tiled.mobs.creatures
 
 			body.shapes.add(poly);
 			body.allowRotation = false;
+			
+			health = 4;
+		}
+		
+		public function damage():void {
+			if(getTimer() - lastHit > 500) {
+				health--;
+				lastHit = getTimer();
+				Level.screenShake.start(10);
+			}
+		}
+		
+		public function get health():int {
+			return _health;
+		}
+		
+		public function set health(h:int):void {
+			_health = h;
+			Main.healthbar.removeChildren();
+			for(var c:int = 0; c < _health; c++) {
+				var bat:MovieClip = new Anim.Battery();
+				bat.scaleX = 4;
+				bat.scaleY = 4;
+				bat.x = (c*20+bat.width);
+				Main.healthbar.addChild(bat);
+			}
+			
+			if(_health <= 0) {
+				Level.pause();
+				Main.gameOver.visible = true;
+			}
 		}
 		
 		public override function draw():void {
@@ -58,7 +91,7 @@ package dk.sebb.tiled.mobs.creatures
 			var kx:int = 0;
 			var ky:int = 0;
 			
-			var vel:int = 80;
+			var vel:int = 60;
 			
 			if(Key.isDown(Keyboard.D)) {
 				kx += vel;

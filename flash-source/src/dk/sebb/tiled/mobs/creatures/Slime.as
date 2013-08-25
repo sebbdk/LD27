@@ -1,5 +1,7 @@
 package dk.sebb.tiled.mobs.creatures
 {
+	import flash.geom.Rectangle;
+	
 	import Anim.Slime;
 	
 	import dk.sebb.tiled.layers.TMXObject;
@@ -8,8 +10,9 @@ package dk.sebb.tiled.mobs.creatures
 	{
 		public function Slime(object:TMXObject)
 		{
-			super(object);
+			super(object, new Rectangle(0, 0, 8, 8));
 			speed += Math.random()*20;
+			health = 1;
 		}
 		
 		public override function draw():void {

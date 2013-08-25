@@ -3,16 +3,23 @@ package dk.sebb.tiled
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
+	import flash.events.TimerEvent;
+	import flash.text.TextField;
 	import flash.ui.Keyboard;
+	import flash.utils.Timer;
 	import flash.utils.getTimer;
 	
 	import dk.sebb.tiled.layers.Layer;
+	import dk.sebb.tiled.layers.TMXObject;
 	import dk.sebb.tiled.mobs.Bullet;
 	import dk.sebb.tiled.mobs.Mob;
-	import dk.sebb.tiled.mobs.PhysMob;
 	import dk.sebb.tiled.mobs.creatures.NPC;
 	import dk.sebb.tiled.mobs.creatures.Player;
+	import dk.sebb.tiled.mobs.creatures.Slime;
 	import dk.sebb.util.AStar;
+	import dk.sebb.util.Cell;
+	import dk.sebb.util.Key;
+	import dk.sebb.util.SMath;
 	import dk.sebb.util.ShakeEffect;
 	
 	import nape.geom.Vec2;
@@ -32,22 +39,81 @@ package dk.sebb.tiled
 		public static var infoBox:InfoBox = new InfoBox();
 		public static var player:Player;
 
-		public var screenShake:ShakeEffect;
+		public static var screenShake:ShakeEffect;
+		
+		public static var timer:Timer = new Timer(1000, 10);
+		public var itteration:int = 1;
+		
+		public static var kills:int = 0;
 		
 		public static var instance:Level;
 		
+		public static var lastShot:int;
+		
 		public static var settings:Object = {
-			debug:true,
+			debug:false,
 			pause:false
 		};
 		
 		public function Level() {			
 			screenShake = new ShakeEffect();
 			
-			scaleX = 4;
-			scaleY = 4;
+			scaleX = 3;
+			scaleY = 3;
 			
 			instance = this;
+			timer.addEventListener(TimerEvent.TIMER, onTimer);
+			timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerDone);
+		}
+		
+		private function onTimer(evt:TimerEvent):void {
+			var text:TextField  = Main.counter.getChildByName('counter') as TextField;
+			text.text = String(10 - timer.currentCount);
+		}
+		
+		private function onTimerDone(evt:TimerEvent):void {
+			trace("!!!!");
+			spawnRandomMonsters(5 * ((itteration/2) + 1));
+			timer.reset();
+			timer.start();
+			screenShake.start(30, 2, 50);
+			itteration++;
+			
+			var text:TextField  = Main.counter.getChildByName('round') as TextField;
+			text.text = String('Round ' + SMath.zeroPad(itteration, 3));
+		}
+		
+		public function spawnRandomMonsters(amount:int):void {
+			var x:int = 0;
+			while(x <= amount) {
+				var randX:int = Math.round(Math.random()*10) + 3;
+				var randY:int = Math.round(Math.random()*10) + 3;
+				
+				if(AStar.getInstance().getCellFromCoords(Vec2.get(randX, randY)).cellType === Cell.CELL_FILLED) {
+					continue;
+				}
+				
+				var type:int = Math.round(Math.random() * 1);
+				 
+				switch(type) {
+					case 0:
+						var npc:NPC = new NPC(new TMXObject());
+						npc.body.position.x = randX*32 + 16;
+						npc.body.position.y = randY*32 + 16;
+						data.addMob(npc);
+						addChild(npc);
+						break;
+					case 1:
+						var slime:Slime = new Slime(new TMXObject());
+						slime.body.position.x = randX*32 + 16;
+						slime.body.position.y = randY*32 + 16;
+						data.addMob(slime);
+						addChild(slime);
+						break;					
+				}
+				
+				x++;
+			}
 		}
 		
 		public function load(levelpath:String):void {
@@ -72,6 +138,7 @@ package dk.sebb.tiled
 				player.body.position = data.spawns[0];
 				data.addMob(player);
 			}
+			player.health = 4;
 			
 			//setup mobs
 			for each(var mob:Mob in data.mobs) {
@@ -82,7 +149,7 @@ package dk.sebb.tiled
 			parent.addChild(infoBox);
 			
 			//debug?
-			if(settings.debug) {
+			if(settings.debug && !debug) {
 				debug = new ShapeDebug(512, 512); //width/height not really important
 				addChild(debug.display);
 			}
@@ -99,9 +166,18 @@ package dk.sebb.tiled
 			settings.pause = false;
 			
 			
-			
 			//Set AStar map with oure map
 			AStar.getInstance().map = data.collisionLayer.map;
+			
+			//start timer
+			var text:TextField  = Main.counter.getChildByName('counter') as TextField;
+			text.text = String(10 - timer.currentCount);
+			timer.reset();
+			timer.start();
+			
+			//reset score
+			kills = 0;
+			itteration = 0;
 		}
 		
 		public function unload():void {
@@ -109,7 +185,7 @@ package dk.sebb.tiled
 			if(stage) {
 				stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			}
-
+			
 			removeEventListener(Event.ENTER_FRAME, run);
 			removeChildren();
 			
@@ -120,7 +196,7 @@ package dk.sebb.tiled
 		}
 		
 		public function onKeyUp(evt:KeyboardEvent):void {
-			if(evt.keyCode === Keyboard.E) {//activate or infobox continue
+			if(evt.keyCode === Keyboard.SPACE) {//activate or infobox continue
 				if(infoBox.hasConvo) {
 					infoBox.convoNext();
 				} else {//else just check mobs
@@ -132,47 +208,13 @@ package dk.sebb.tiled
 					}
 				}
 			}
-
-			switch(evt.keyCode) {
-				case Keyboard.UP:
-					var b:Bullet = new Bullet();
-					b.body.group = player.body.group;
-					b.body.position.setxy(player.body.position.x, player.body.position.y - 27);
-					b.fire(0, -1);
-					addChild(b);
-					data.addMob(b);
-					break;
-				case Keyboard.DOWN:
-					var b:Bullet = new Bullet();
-					b.body.group = player.body.group;
-					b.body.position.setxy(player.body.position.x, player.body.position.y - 27);
-					b.fire(0, 1);
-					addChild(b);
-					data.addMob(b);
-					break;
-				case Keyboard.LEFT:
-					var b:Bullet = new Bullet();
-					b.body.group = player.body.group;
-					b.body.position.setxy(player.body.position.x, player.body.position.y - 27);
-					b.fire(-1, 0);
-					addChild(b);
-					data.addMob(b);
-					break;
-				case Keyboard.RIGHT:
-					var b:Bullet = new Bullet();
-					b.body.group = player.body.group;
-					b.body.position.setxy(player.body.position.x, player.body.position.y - 27);
-					b.fire(1, 0);
-					addChild(b);
-					data.addMob(b);
-					break;
-			}
+	
 		}
 		
 		public static function pause():void {
 			settings.pause = true;
-			
-			for each(var mob:PhysMob in data.mobs) {
+			timer.stop();
+			for each(var mob:Mob in data.mobs) {
 				mob.stop();
 				if(mob.animator) {
 					mob.animator.stop();
@@ -181,6 +223,7 @@ package dk.sebb.tiled
 		}
 		
 		public static function unPause():void {
+			timer.start();
 			settings.pause = false;
 		}
 		
@@ -211,9 +254,54 @@ package dk.sebb.tiled
 					debug.clear();
 					debug.draw(space);
 				}
+				
+				//fire buttons etc
+				isDownCheck();
 			}
 			if(deltaTime > 1) {
 				lastFrameTime = getTimer();
+			}
+		}
+		
+		public function isDownCheck():void {
+			if(getTimer() - lastShot > 100) {
+				if(Key.isDown(Keyboard.UP)) {
+					var b:Bullet = new Bullet();
+					b.body.group = player.body.group;
+					b.body.position.setxy(player.body.position.x, player.body.position.y - 12);
+					b.fire(0, -1);
+					addChild(b);
+					data.addMob(b);
+				}
+				
+				if(Key.isDown(Keyboard.DOWN)) {
+					var b:Bullet = new Bullet();
+					b.body.group = player.body.group;
+					b.body.position.setxy(player.body.position.x, player.body.position.y - 12);
+					b.fire(0, 1);
+					addChild(b);
+					data.addMob(b);
+				}
+				
+				if(Key.isDown(Keyboard.LEFT)) {
+					var b:Bullet = new Bullet();
+					b.body.group = player.body.group;
+					b.body.position.setxy(player.body.position.x, player.body.position.y - 12);
+					b.fire(-1, 0);
+					addChild(b);
+					data.addMob(b)
+				}
+				
+				if(Key.isDown(Keyboard.RIGHT)) {
+					var b:Bullet = new Bullet();
+					b.body.group = player.body.group;
+					b.body.position.setxy(player.body.position.x, player.body.position.y - 12);
+					b.fire(1, 0);
+					addChild(b);
+					data.addMob(b);
+				}
+				
+				lastShot = getTimer();
 			}
 		}
 

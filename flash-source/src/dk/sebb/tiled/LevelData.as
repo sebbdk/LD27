@@ -60,6 +60,22 @@ package dk.sebb.tiled
 			}
 		}
 		
+		public function removeMob(mob:Mob):void {
+			for(var i:int = 0; i < mobs.length; i++) {
+				if(mobs[i] === mob) {
+					mobs.splice(i, 1);
+					mob.unload();
+				}
+			}
+		}
+		
+		public function addMob(mob:Mob):void {
+			if(mob is PhysMob) {
+				PhysMob(mob).body.space = Level.space;
+			}
+			mobs.push(mob);
+		}
+		
 		public function onTMXLoaded(evt:Event):void {
 			tmxLoader.removeEventListener(Event.COMPLETE, onTMXLoaded);
 			//get object layers
@@ -147,13 +163,6 @@ package dk.sebb.tiled
 					}
 				}
 			}
-		}
-		
-		public function addMob(mob:Mob):void {
-			if(mob is PhysMob) {
-				PhysMob(mob).body.space = Level.space;
-			}
-			mobs.push(mob);
 		}
 		
 		/**

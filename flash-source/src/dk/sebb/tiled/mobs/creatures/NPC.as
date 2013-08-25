@@ -1,17 +1,20 @@
 package dk.sebb.tiled.mobs.creatures
 {
 	import flash.display.MovieClip;
+	import flash.geom.Rectangle;
+	import flash.text.TextField;
+	import flash.utils.getTimer;
 	
 	import Anim.BlueGuy;
 	
-	import avmplus.getQualifiedClassName;
-	
 	import dk.sebb.tiled.Level;
 	import dk.sebb.tiled.layers.TMXObject;
+	import dk.sebb.tiled.mobs.Bullet;
 	import dk.sebb.tiled.mobs.ObjMob;
 	import dk.sebb.tiled.mobs.PhysMob;
 	import dk.sebb.util.AStar;
 	import dk.sebb.util.Cell;
+	import dk.sebb.util.SMath;
 	
 	import nape.callbacks.CbEvent;
 	import nape.callbacks.CbType;
@@ -30,7 +33,8 @@ package dk.sebb.tiled.mobs.creatures
 		public var proximityPoly:Polygon;
 		public var onEnterListener:InteractionListener;
 		public var onLeaveListener:InteractionListener;
-		public static var collisionType:CbType = new CbType();
+		public var onBulletListener:InteractionListener;
+		public var collisionType:CbType = new CbType();
 
 		public var direction:Vec2 = new Vec2();
 		public var currentAnimation:String = "";
@@ -42,8 +46,17 @@ package dk.sebb.tiled.mobs.creatures
 		
 		public var path:Array;
 		
-		public function NPC(object:TMXObject, collWidth:Number = 4, collHeight:Number = 4)
+		public var _health:int = 2;
+		public var lastHit:int = 0;
+		
+		public var created:Number;
+		
+		public function NPC(object:TMXObject, colRect:Rectangle = null)
 		{
+			created = getTimer();
+			
+			colRect = colRect ? colRect:new Rectangle(0, -10, 8, 20);
+			
 			this.object = object;
 			draw();
 			
@@ -53,14 +66,15 @@ package dk.sebb.tiled.mobs.creatures
 			body.cbTypes.add(ObjMob.collisionType);
 			body.group = ObjMob.group;
 			
-			poly = new Polygon(Polygon.box(collWidth, collHeight));
+			poly = new Polygon(Polygon.box(4, 4));
 			body.shapes.add(poly);
 			
-			proximityPoly = new Polygon(Polygon.box(collWidth*2, collHeight*2));
+			proximityPoly = new Polygon(Polygon.box(colRect.width, colRect.height));
+			proximityPoly.translate(Vec2.get(colRect.x, colRect.y));
 			proximityPoly.sensorEnabled = true;
 			body.shapes.add(proximityPoly);
 			
-			onEnterListener = new InteractionListener(CbEvent.BEGIN, 
+			onEnterListener = new InteractionListener(CbEvent.ONGOING, 
 				InteractionType.SENSOR,
 				collisionType,
 				Player.collisionType,
@@ -76,13 +90,47 @@ package dk.sebb.tiled.mobs.creatures
 			
 			Level.space.listeners.add(onLeaveListener);
 			
+			onBulletListener = new InteractionListener(CbEvent.BEGIN, 
+				InteractionType.SENSOR,
+				collisionType,
+				Bullet.collisionType,
+				onBullehit);
+			
+			Level.space.listeners.add(onBulletListener);
+			
 			hasPerspective = true;
+		}
+		
+		public function onBullehit(collision:InteractionCallback):void {
+			damage();
+		}
+		
+		public function damage():void {
+			health--;
+			lastHit = getTimer();
+		}
+		
+		public function get health():int {
+			return _health;
+		}
+		
+		public function set health(h:int):void {
+			_health = h;
+			if(_health <= 0) {
+				Level.data.removeMob(this);
+				
+				Level.kills++;
+				var text:TextField  = Main.counter.getChildByName('kills') as TextField;
+				text.text = String('Kills ' + SMath.zeroPad(Level.kills, 3));
+			}
 		}
 		
 		private function onPlayerEnter(collision:InteractionCallback):void {
 			trace("YOU ARE TOO CLOSE!!");
 			if(object.onEnter) {
 				Level.lua.doString(object.onEnter);
+			} else {
+				Level.player.damage();
 			}
 			
 			playerInProximity = true;
@@ -108,10 +156,12 @@ package dk.sebb.tiled.mobs.creatures
 			var cpos:Vec2 = Vec2.get(myCell.x, myCell.y, true);//!!!!
 			
 			try {
-				if(playerCell && playerCell.cellType === Cell.CELL_FILLED) {
+				if(!playerCell || playerCell.cellType === Cell.CELL_FILLED) {
 					destination.x += Math.round(Math.random()*6) - 3;
 					destination.y += Math.round(Math.random()*6) - 3;
-					path = AStar.getInstance().findPath(cpos, destination);
+					if(!AStar.getInstance().getCellFromCoords(destination).cellType !== Cell.CELL_FILLED) {
+						path = AStar.getInstance().findPath(cpos, destination);
+					}
 				} else {
 					destination = Vec2.get(playerCell.x  + Math.round(Math.random()*2) - 1, playerCell.y  + Math.round(Math.random()*2) - 1, true);
 					path = AStar.getInstance().findPath(cpos, destination);
@@ -132,7 +182,7 @@ package dk.sebb.tiled.mobs.creatures
 				findPath();
 			}
 			
-			if(Vec2.distance(body.position,  Level.player.body.position) < 32) {
+			if(Vec2.distance(body.position,  Level.player.body.position) < 16) {//change
 				vec = Level.player.body.position.sub(body.position);
 				vec.length = 50;
 			} else if(path && path.length > 0) {//continue down the current path if we have a path

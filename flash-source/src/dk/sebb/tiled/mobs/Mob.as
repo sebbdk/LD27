@@ -6,6 +6,7 @@ package dk.sebb.tiled.mobs
 	public class Mob extends MovieClip
 	{
 		public var hasPerspective:Boolean;
+		public var animator:MovieClip;
 		
 		public function Mob()
 		{
@@ -28,6 +29,12 @@ package dk.sebb.tiled.mobs
 					}
 				}
 			}
-		} 		
+		}
+		
+		public function unload():void {
+			if(parent) {
+				parent.removeChild(this);
+			}
+		}
 	}
 }

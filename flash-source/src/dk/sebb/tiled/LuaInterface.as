@@ -33,7 +33,7 @@ package dk.sebb.tiled
 		}
 		
 		public static function shake(magnitude:int = 5, delay:Number = 1/30, repeatCount:int = 40):void {
-			Level.instance.screenShake.start(magnitude, delay, repeatCount);
+			Level.screenShake.start(magnitude, delay, repeatCount);
 		}
 		
 		public static function say(str:String):void {

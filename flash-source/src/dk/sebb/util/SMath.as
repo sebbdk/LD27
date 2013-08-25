@@ -12,6 +12,13 @@ package dk.sebb.util
 		{
 		}
 		
+		public static function zeroPad(number:int, width:int):String {
+			var ret:String = ""+number;
+			while( ret.length < width )
+				ret="0" + ret;
+			return ret;
+		}
+		
 		public static function randomRadiusPoint(radius:Number, vec:Vec2 = null):Vec2
 		{
 			var randomAngle:Number = Math.random() * (Math.PI * 2);

@@ -26,10 +26,10 @@ package dk.sebb.tiled.mobs
 		public var directionX:int = 0;
 		public var directionY:int = 0;
 		public var speed:Number = 0;
-		public var lifeSpan:int = 1000;
+		public var lifeSpan:int = 5000;
 		
 		public static var pool:Array = [];
-		public static var poolLimit:int = 10;
+		public static var poolLimit:int = 80;
 
 /**
  * Do not call new instave directly
@@ -84,7 +84,7 @@ package dk.sebb.tiled.mobs
  * @param  speed      Number
  * @return void
  */
-		public function fire(directionX:int, directionY:int, speed:Number = 200):void {
+		public function fire(directionX:int, directionY:int, speed:Number = 150):void {
 			this.directionX = directionX; 
 			this.directionY = directionY;
 			this.speed = speed;
@@ -94,17 +94,6 @@ package dk.sebb.tiled.mobs
 			lifeTimer.reset();
 			lifeTimer.delay = lifeSpan;
 			lifeTimer.start();
-		}
-
-/**
- * Clean up the bullet so it is ready for use again
- * @return void
- */
-		public function unload():void {
-			body.space = null;
-			if(parent) {
-				parent.removeChild(this);
-			}
 		}
 
 /**

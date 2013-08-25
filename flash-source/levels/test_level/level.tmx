@@ -17,6 +17,11 @@
  </tileset>
  <imagelayer name="bg" width="16" height="16">
   <image source="bg.png"/>
+  <properties>
+   <property name="offsetX" value="-0.4"/>
+   <property name="offsetY" value="-0.4"/>
+   <property name="parallax" value="true"/>
+  </properties>
  </imagelayer>
  <layer name="ground" width="16" height="16">
   <data>
@@ -403,7 +408,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="258"/>
+   <tile gid="0"/>
    <tile gid="258"/>
    <tile gid="258"/>
    <tile gid="0"/>
@@ -419,7 +424,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="258"/>
+   <tile gid="0"/>
    <tile gid="258"/>
    <tile gid="258"/>
    <tile gid="0"/>
@@ -682,8 +687,8 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="518"/>
    <tile gid="0"/>
+   <tile gid="518"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -814,7 +819,7 @@
     <property name="type" value="playerspawn"/>
    </properties>
   </object>
-  <object x="223" y="224" width="97" height="66">
+  <object x="262" y="225" width="53" height="61">
    <properties>
     <property name="type" value="obj"/>
    </properties>
@@ -849,87 +854,7 @@
     <property name="type" value="obj"/>
    </properties>
   </object>
-  <object name="TestNPC" x="199" y="230" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="252" y="199" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="381" y="231" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="290" y="318" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="299" y="120" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="411" y="124" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="356" y="187" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="411" y="281" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="425" y="392" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="273" y="422" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="294" y="369" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="241" y="305" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="139" y="391" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="115" y="317" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="106" y="242" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="112" y="167" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="143" y="111" width="16" height="17">
+  <object name="TestNPC" x="412" y="410" width="16" height="17">
    <properties>
     <property name="type" value="slime"/>
    </properties>
@@ -942,6 +867,16 @@
   <object x="133" y="212" width="17" height="11">
    <properties>
     <property name="type" value="obj"/>
+   </properties>
+  </object>
+  <object name="TestNPC" x="360" y="223" width="16" height="17">
+   <properties>
+    <property name="type" value="slime"/>
+   </properties>
+  </object>
+  <object name="TestNPC" x="286" y="353" width="16" height="17">
+   <properties>
+    <property name="type" value="slime"/>
    </properties>
   </object>
  </objectgroup>

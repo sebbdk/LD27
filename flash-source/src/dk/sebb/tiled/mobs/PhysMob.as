@@ -1,7 +1,5 @@
 package dk.sebb.tiled.mobs
 {
-	import flash.display.MovieClip;
-	
 	import nape.geom.Vec2;
 	import nape.phys.Body;
 	import nape.phys.BodyType;
@@ -11,7 +9,6 @@ package dk.sebb.tiled.mobs
 	{
 		public var body:Body;
 		public var poly:Polygon;
-		public var animator:MovieClip;
 
 		public function PhysMob(type:BodyType = null)
 		{
@@ -25,5 +22,10 @@ package dk.sebb.tiled.mobs
 			rotation = body.rotation * 180 / Math.PI;
 			super.update();
 		} 
+		
+		public override function unload():void {
+			super.unload();
+			body.space = null;
+		}
 	}
 }
