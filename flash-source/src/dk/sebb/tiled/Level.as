@@ -1,14 +1,5 @@
 package dk.sebb.tiled
 {
-	import flash.display.MovieClip;
-	import flash.events.Event;
-	import flash.events.KeyboardEvent;
-	import flash.events.TimerEvent;
-	import flash.text.TextField;
-	import flash.ui.Keyboard;
-	import flash.utils.Timer;
-	import flash.utils.getTimer;
-	
 	import dk.sebb.tiled.layers.Layer;
 	import dk.sebb.tiled.layers.TMXObject;
 	import dk.sebb.tiled.mobs.Bullet;
@@ -21,6 +12,15 @@ package dk.sebb.tiled
 	import dk.sebb.util.Key;
 	import dk.sebb.util.SMath;
 	import dk.sebb.util.ShakeEffect;
+	
+	import flash.display.MovieClip;
+	import flash.events.Event;
+	import flash.events.KeyboardEvent;
+	import flash.events.TimerEvent;
+	import flash.text.TextField;
+	import flash.ui.Keyboard;
+	import flash.utils.Timer;
+	import flash.utils.getTimer;
 	
 	import nape.geom.Vec2;
 	import nape.space.Space;
@@ -41,7 +41,7 @@ package dk.sebb.tiled
 
 		public static var screenShake:ShakeEffect;
 		
-		public static var timer:Timer = new Timer(1000, 10);
+		public static var timer:Timer = new Timer(1000, 10);//change me back!
 		public static var itteration:int = 1;
 		
 		public static var kills:int = 0;
@@ -53,7 +53,7 @@ package dk.sebb.tiled
 		public var firstTime:Boolean = true;
 		
 		public static var settings:Object = {
-			debug:false,
+			debug:true,
 			pause:false
 		};
 		

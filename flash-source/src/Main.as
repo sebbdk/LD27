@@ -75,7 +75,7 @@ package
 			
 			setTimeout(function() {
 				addChild(starSplash);
-			}, 2000);
+			}, 1000);
 		} 
 		
 		public function restartLevel(evt:Event):void {

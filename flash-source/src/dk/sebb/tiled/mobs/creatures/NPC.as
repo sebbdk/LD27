@@ -89,7 +89,7 @@ package dk.sebb.tiled.mobs.creatures
 				onPlayerExit);
 			
 			Level.space.listeners.add(onLeaveListener);
-			
+
 			onBulletListener = new InteractionListener(CbEvent.BEGIN, 
 				InteractionType.SENSOR,
 				collisionType,

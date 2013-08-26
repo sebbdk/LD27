@@ -20,6 +20,7 @@ package dk.sebb.tiled.mobs
 	public class Bullet extends PhysMob
 	{
 		public static var collisionType:CbType = new CbType();
+		public var localCollisionType:CbType = new CbType();
 		public var onCollisionListener:InteractionListener;
 		public var lifeTimer:Timer
 		
@@ -45,11 +46,12 @@ package dk.sebb.tiled.mobs
 			body.shapes.add(poly);
 			body.allowRotation = false;
 			body.cbTypes.add(collisionType);
+			body.cbTypes.add(localCollisionType);
 			
 			//setup interaction listener
 			onCollisionListener = new InteractionListener(CbEvent.ONGOING, 
 				InteractionType.ANY,
-				collisionType,
+				localCollisionType,
 				ObjMob.collisionType,
 				onCollision);
 			Level.space.listeners.add(onCollisionListener);
