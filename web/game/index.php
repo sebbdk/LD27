@@ -2,10 +2,10 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Sebb - Reactor madness!</title>
+	<title>Sebb - LD27 Reactor madness!</title>
 	<link rel="stylesheet" href="">
 
-	<meta property="og:title" content="Sebb - Reactor madness!"/>
+	<meta property="og:title" content="Sebb - LD27 Reactor madness!"/>
 	<meta property="og:image" content="http://<?php echo $_SERVER['HTTP_HOST'] ?>/flash/ld27/web/game/img/facebook_new.png"/>
 	<meta property="og:url" content="http://<?php echo $_SERVER['HTTP_HOST'] ?>/flash/ld27/web/game/"/>
 	<meta name="description" property="og:description" content="The entity knows not what who/what/where he is, the only thing he knows is that that big blue thing is important."/> 
@@ -13,7 +13,7 @@
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 
 	<!-- Custom styles for this template -->
-	<link href="css/jumbotron-narrow.css" rel="stylesheet">
+	<link href="css/jumbotron-narrow.css" rel="stylesheet"> 
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
@@ -34,7 +34,7 @@
 				--> 
 			</ul>
 
-			<h3 class="text-muted">Sebb Games - Reactor madness!</h3>
+			<h3 class="text-muted">Sebb Games - LD27 Reactor madness!</h3>
 		</div>
 
 		<div class="jumbotron" id="flash-container">
