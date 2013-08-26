@@ -50,6 +50,8 @@ package dk.sebb.tiled
 		
 		public static var lastShot:int;
 		
+		public var firstTime:Boolean = true;
+		
 		public static var settings:Object = {
 			debug:false,
 			pause:false
@@ -72,7 +74,6 @@ package dk.sebb.tiled
 		}
 		
 		private function onTimerDone(evt:TimerEvent):void {
-			trace("!!!!");
 			spawnRandomMonsters(5 * ((itteration/2) + 1));
 			timer.reset();
 			timer.start();
@@ -126,10 +127,16 @@ package dk.sebb.tiled
 		}
 		
 		public function onLevelLoaded(evt:Event):void {
+			
 			//add layers!
 			for each(var layer:Layer in data.tmxLoader.layers) {
 				//layer.displayObject.alpha = 0.5;
 				addChild(layer.displayObject);
+			}
+			
+			if(firstTime) {
+				firstTime = false;
+				return;
 			}
 			
 			//setup player

@@ -10,6 +10,7 @@ package
 	
 	import Anim.Counter;
 	import Anim.Gameover;
+	import Anim.StartGame;
 	
 	import dk.sebb.tiled.Level;
 	import dk.sebb.util.Key;
@@ -26,6 +27,7 @@ package
 		public static var healthbar:MovieClip;
 		public static var gameOver:MovieClip;
 		public static var counter:MovieClip;
+		public static var starSplash:MovieClip;
 		
 /**
  * Load the first level right away!
@@ -60,9 +62,21 @@ package
 			counter.x = stage.stageWidth - counter.width - 20;
 			counter.y = 20;
 			addChild(counter);
+			
+			starSplash = new StartGame();
+			starSplash.x = stage.stageWidth/2;
+			starSplash.y = stage.stageHeight/2;
+			starSplash.scaleX = 4;
+			starSplash.scaleY = 4;
+			starSplash.useHandCursor = true;
+			starSplash.buttonMode = true;
+			starSplash.addEventListener(MouseEvent.CLICK, restartLevel);
+			addChild(starSplash);
+			
 		} 
 		
 		public function restartLevel(evt:Event):void {
+			starSplash.visible = false;
 			gameOver.visible = false;
 			level.unload();
 			level.load(levels[levelindex]);
