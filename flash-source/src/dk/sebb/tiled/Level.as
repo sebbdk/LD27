@@ -90,8 +90,9 @@ package dk.sebb.tiled
 				var randX:int = Math.round(Math.random()*10) + 3;
 				var randY:int = Math.round(Math.random()*10) + 3;
 				
-				if(AStar.getInstance().getCellFromCoords(Vec2.get(randX, randY)).cellType === Cell.CELL_FILLED) {
+				if(AStar.getInstance().getCellFromCoords(Vec2.get(randX*32+5, randY*32+5)).cellType === Cell.CELL_FILLED) {
 					continue;
+					trace("WUUUUUUUUT!");
 				}
 				
 				var type:int = Math.round(Math.random() * 1);
