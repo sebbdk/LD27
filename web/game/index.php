@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="">
 
 	<meta property="og:title" content="Sebb - Reactor madness!"/>
-	<meta property="og:image" content="http://<?php echo $_SERVER['HTTP_HOST'] ?>/flash/ld27/web/game/facebooklogo.png"/>
+	<meta property="og:image" content="http://<?php echo $_SERVER['HTTP_HOST'] ?>/flash/ld27/web/game/img/facebook.png"/>
 	<meta property="og:url" content="http://<?php echo $_SERVER['HTTP_HOST'] ?>/flash/ld27/web/game/"/>
 
 	<link href="css/bootstrap.min.css" rel="stylesheet">
