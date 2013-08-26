@@ -51,6 +51,7 @@ A moment later portals open up and creatures come out, they charge him, leaving 
  <br />
 PS:  <br />
 Controls are WASD to move and hold arrow keys down to shoot!  <br />
+Hide behind the trees for cover the mobs cannot see you there!<br />
  <br />
 PPS:  <br />
 Keep strong, and stay alive!
