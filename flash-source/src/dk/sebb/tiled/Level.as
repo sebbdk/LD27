@@ -42,7 +42,7 @@ package dk.sebb.tiled
 		public static var screenShake:ShakeEffect;
 		
 		public static var timer:Timer = new Timer(1000, 10);
-		public var itteration:int = 1;
+		public static var itteration:int = 1;
 		
 		public static var kills:int = 0;
 		

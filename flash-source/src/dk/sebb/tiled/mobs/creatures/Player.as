@@ -1,6 +1,7 @@
 package dk.sebb.tiled.mobs.creatures
 {
 	import flash.display.MovieClip;
+	import flash.external.ExternalInterface;
 	import flash.ui.Keyboard;
 	import flash.utils.getTimer;
 	
@@ -71,6 +72,13 @@ package dk.sebb.tiled.mobs.creatures
 			if(_health <= 0) {
 				Level.pause();
 				Main.gameOver.visible = true;
+				saveScore();
+			}
+		}
+		
+		public function saveScore():void {
+			if(ExternalInterface.available) {
+				ExternalInterface.call('saveScore', [Level.kills, Level.itteration]);
 			}
 		}
 		

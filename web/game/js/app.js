@@ -8,4 +8,9 @@
 		swfobject.embedSWF("../../flash-source/bin-release/Main.swf", "flash-container", "100%", "600", "11.4.0", "swf/expressInstall.swf");
 	});
 
+
+	window.saveScore = function(user, score) {
+		console.log('saving score:' + user + ', ' + score);
+	}
+
 })();
