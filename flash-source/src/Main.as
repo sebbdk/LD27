@@ -7,6 +7,7 @@ package
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
+	import flash.utils.setTimeout;
 	
 	import Anim.Counter;
 	import Anim.Gameover;
@@ -71,8 +72,10 @@ package
 			starSplash.useHandCursor = true;
 			starSplash.buttonMode = true;
 			starSplash.addEventListener(MouseEvent.CLICK, restartLevel);
-			addChild(starSplash);
 			
+			setTimeout(function() {
+				addChild(starSplash);
+			}, 2000);
 		} 
 		
 		public function restartLevel(evt:Event):void {
