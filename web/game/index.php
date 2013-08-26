@@ -76,6 +76,8 @@ Keep strong, and stay alive!
 			</div>
 		</div>
 
+		<div class="fb-comments" data-href="http://<?php echo $_SERVER['HTTP_HOST'] ?>/flash/ld27/web/game/" data-width="810"></div>
+
 		<div class="footer">
 			<p>&copy; Sebb 2013</p>
 		</div>
