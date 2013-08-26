@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="">
 
 	<meta property="og:title" content="Sebb - Reactor madness!"/>
-	<meta property="og:image" content="http://<?php echo $_SERVER['HTTP_HOST'] ?>/flash/ld27/web/game/img/facebook.png"/>
+	<meta property="og:image" content="http://<?php echo $_SERVER['HTTP_HOST'] ?>/flash/ld27/web/game/img/facebook_new.png"/>
 	<meta property="og:url" content="http://<?php echo $_SERVER['HTTP_HOST'] ?>/flash/ld27/web/game/"/>
 	<meta name="description" property="og:description" content="The entity knows not what who/what/where he is, the only thing he knows is that that big blue thing is important."/> 
 
