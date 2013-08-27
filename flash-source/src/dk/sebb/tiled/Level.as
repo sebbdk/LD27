@@ -1,5 +1,8 @@
 package dk.sebb.tiled
 {
+	import dk.sebb.tiled.happening.IHappening;
+	import dk.sebb.tiled.happening.MonsterHappening;
+	import dk.sebb.tiled.happening.SlimeHappening;
 	import dk.sebb.tiled.layers.Layer;
 	import dk.sebb.tiled.layers.TMXObject;
 	import dk.sebb.tiled.mobs.Bullet;
@@ -50,6 +53,13 @@ package dk.sebb.tiled
 		
 		public static var lastShot:int;
 		
+		public var happenings:Array = [
+			new MonsterHappening(),
+			new SlimeHappening(),
+		];
+		
+		public var currentHappening:IHappening;
+		
 		public var firstTime:Boolean = true;
 		
 		public static var settings:Object = {
@@ -74,7 +84,14 @@ package dk.sebb.tiled
 		}
 		
 		private function onTimerDone(evt:TimerEvent):void {
-			spawnRandomMonsters(5 * ((itteration/2) + 1));
+			if(currentHappening) {
+				currentHappening.unload();
+			}
+			
+			var index:int = Math.round(Math.random() * (happenings.length-1));
+			currentHappening = happenings[index];
+			currentHappening.load(itteration, this);
+
 			timer.reset();
 			timer.start();
 			screenShake.start(30, 2, 50);
@@ -82,40 +99,6 @@ package dk.sebb.tiled
 			
 			var text:TextField  = Main.counter.getChildByName('round') as TextField;
 			text.text = String('Round ' + SMath.zeroPad(itteration, 3));
-		}
-		
-		public function spawnRandomMonsters(amount:int):void {
-			var x:int = 0;
-			while(x <= amount) {
-				var randX:int = Math.round(Math.random()*10) + 3;
-				var randY:int = Math.round(Math.random()*10) + 3;
-				
-				if(AStar.getInstance().getCellFromCoords(Vec2.get(randX*32+5, randY*32+5)).cellType === Cell.CELL_FILLED) {
-					continue;
-					trace("WUUUUUUUUT!");
-				}
-				
-				var type:int = Math.round(Math.random() * 1);
-				 
-				switch(type) {
-					case 0:
-						var npc:NPC = new NPC(new TMXObject());
-						npc.body.position.x = randX*32 + 16;
-						npc.body.position.y = randY*32 + 16;
-						data.addMob(npc);
-						addChild(npc);
-						break;
-					case 1:
-						var slime:Slime = new Slime(new TMXObject());
-						slime.body.position.x = randX*32 + 16;
-						slime.body.position.y = randY*32 + 16;
-						data.addMob(slime);
-						addChild(slime);
-						break;					
-				}
-				
-				x++;
-			}
 		}
 		
 		public function load(levelpath:String):void {

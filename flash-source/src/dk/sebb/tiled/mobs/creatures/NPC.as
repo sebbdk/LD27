@@ -190,7 +190,7 @@ package dk.sebb.tiled.mobs.creatures
 					path.shift();
 				} else {
 					vec = path[0].sub(body.position);
-					vec.length = 50;
+					vec.length = speed;
 				}
 			} else {//else find a path
 				findPath();
