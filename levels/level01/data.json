@@ -1,0 +1,59 @@
+{
+	"people":[
+		{
+			"name":"Narrator"
+		},
+		{
+			"name":"Bill Port",
+			"isPlayer":true
+		},
+		{
+			"name":"Voice in your head"
+		}
+	],
+	"conversations":{
+		"convo01":{
+			"pause":true,
+			"statements":[
+				{
+					"person":0,
+					"text":"In a not so ordinary place a entity suddonly appears. "
+				},
+				{
+					"person":0,
+					"text":"he entity knows not who/what/where he is,\nthe only thing he knows is that that big blue thing is important. "
+				},
+				{
+					"person":0,
+					"text":"A moment later portals open up and creatures come out,\nthey charge him, leaving him no other option than to fight to protect himself,\nand the precious blue structure... "
+				}
+			]
+		},
+		"convo02":{
+			"pause":true,
+			"statements":[
+				{
+					"person":2,
+					"text":"You can do this, keep at it!"
+				},
+				{
+					"person":2,
+					"text":"whack em good! ... eh shoot em good!"
+				}
+			]
+		},
+		"convo03":{
+			"pause":true,
+			"statements":[
+				{
+					"person":2,
+					"text":"Use the bushes!"
+				},
+				{
+					"person":2,
+					"text":"They cannot see you if you stand behind a bush"
+				}
+			]
+		}
+	}
+}

@@ -2,6 +2,7 @@ package dk.sebb.tiled
 {
 	import dk.sebb.tiled.happening.IHappening;
 	import dk.sebb.tiled.happening.MonsterHappening;
+	import dk.sebb.tiled.happening.NarrationHappening;
 	import dk.sebb.tiled.happening.SlimeHappening;
 	import dk.sebb.tiled.layers.Layer;
 	import dk.sebb.tiled.layers.TMXObject;
@@ -24,6 +25,7 @@ package dk.sebb.tiled
 	import flash.ui.Keyboard;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
+	import flash.utils.setTimeout;
 	
 	import nape.geom.Vec2;
 	import nape.space.Space;
@@ -59,6 +61,7 @@ package dk.sebb.tiled
 		];
 		
 		public var currentHappening:IHappening;
+		public var itterationConvo:IHappening = new NarrationHappening();
 		
 		public var firstTime:Boolean = true;
 		
@@ -75,7 +78,7 @@ package dk.sebb.tiled
 			
 			instance = this;
 			timer.addEventListener(TimerEvent.TIMER, onTimer);
-			timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerDone);
+			timer.addEventListener(TimerEvent.TIMER_COMPLETE, nextRound);
 		}
 		
 		private function onTimer(evt:TimerEvent):void {
@@ -83,7 +86,7 @@ package dk.sebb.tiled
 			text.text = String(10 - timer.currentCount);
 		}
 		
-		private function onTimerDone(evt:TimerEvent):void {
+		private function nextRound(evt:TimerEvent = null):void {
 			if(currentHappening) {
 				currentHappening.unload();
 			}
@@ -91,6 +94,8 @@ package dk.sebb.tiled
 			var index:int = Math.round(Math.random() * (happenings.length-1));
 			currentHappening = happenings[index];
 			currentHappening.load(itteration, this);
+			
+			itterationConvo.load(itteration, this);
 
 			timer.reset();
 			timer.start();
@@ -169,6 +174,11 @@ package dk.sebb.tiled
 			//reset score
 			kills = 0;
 			itteration = 0;
+			
+			var self:Level = this;
+			setTimeout(function():void {
+				nextRound();
+			}, 200);
 		}
 		
 		public function unload():void {
