@@ -58,9 +58,9 @@ package dk.sebb.tiled
 		public static var lastShot:int;
 		
 		public var happenings:Array = [
-			//new MonsterHappening(),
-			//new SlimeHappening(),
-			//new SpeedSlimeHappening(),
+			new MonsterHappening(),
+			new SlimeHappening(),
+			new SpeedSlimeHappening(),
 			new BossHappening()
 		];
 		
