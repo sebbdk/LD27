@@ -3,7 +3,6 @@ package dk.sebb.tiled.happening
 	
 	import dk.sebb.tiled.Level;
 	import dk.sebb.tiled.layers.TMXObject;
-	import dk.sebb.tiled.mobs.PhysMob;
 	import dk.sebb.tiled.mobs.creatures.NPC;
 	import dk.sebb.tiled.mobs.creatures.Slime;
 	import dk.sebb.util.AStar;
@@ -47,7 +46,7 @@ package dk.sebb.tiled.happening
 				var mob:NPC = new monsterTypes[type](new TMXObject());
 				mob.body.position.x = randX*32 + 16;
 				mob.body.position.y = randY*32 + 16;
-				mob.filters = filters;;
+				mob.filters = filters.length > 0 ? filters:mob.filters;
 				mob.speed *= speedMultiplier;
 				mob.health = health != -1 ? health:mob.health;
 				Level.data.addMob(mob);

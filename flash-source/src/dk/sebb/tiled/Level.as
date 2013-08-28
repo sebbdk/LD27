@@ -1,6 +1,17 @@
 package dk.sebb.tiled
 {
+	import flash.display.MovieClip;
+	import flash.events.Event;
+	import flash.events.KeyboardEvent;
+	import flash.events.TimerEvent;
+	import flash.text.TextField;
+	import flash.ui.Keyboard;
+	import flash.utils.Timer;
+	import flash.utils.getTimer;
+	import flash.utils.setTimeout;
+	
 	import dk.sebb.tiled.happening.BossHappening;
+	import dk.sebb.tiled.happening.BulletDroneHappening;
 	import dk.sebb.tiled.happening.IHappening;
 	import dk.sebb.tiled.happening.MonsterHappening;
 	import dk.sebb.tiled.happening.NarrationHappening;
@@ -18,16 +29,6 @@ package dk.sebb.tiled
 	import dk.sebb.util.Key;
 	import dk.sebb.util.SMath;
 	import dk.sebb.util.ShakeEffect;
-	
-	import flash.display.MovieClip;
-	import flash.events.Event;
-	import flash.events.KeyboardEvent;
-	import flash.events.TimerEvent;
-	import flash.text.TextField;
-	import flash.ui.Keyboard;
-	import flash.utils.Timer;
-	import flash.utils.getTimer;
-	import flash.utils.setTimeout;
 	
 	import nape.geom.Vec2;
 	import nape.space.Space;
@@ -58,10 +59,11 @@ package dk.sebb.tiled
 		public static var lastShot:int;
 		
 		public var happenings:Array = [
-			new MonsterHappening(),
-			new SlimeHappening(),
-			new SpeedSlimeHappening(),
-			new BossHappening()
+			//new MonsterHappening(),
+			//new SlimeHappening(),
+			//new SpeedSlimeHappening(),
+			//new BossHappening(),
+			new BulletDroneHappening()
 		];
 		
 		public var currentHappening:IHappening;

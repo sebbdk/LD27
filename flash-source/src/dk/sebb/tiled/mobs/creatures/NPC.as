@@ -126,7 +126,7 @@ package dk.sebb.tiled.mobs.creatures
 		}
 		
 		private function onPlayerEnter(collision:InteractionCallback):void {
-			trace("YOU ARE TOO CLOSE!!");
+		//	trace("YOU ARE TOO CLOSE!!");
 			if(object.onEnter) {
 				Level.lua.doString(object.onEnter);
 			} else {
@@ -137,7 +137,7 @@ package dk.sebb.tiled.mobs.creatures
 		}
 		
 		private function onPlayerExit(collision:InteractionCallback):void {
-			trace("yes, get out of here you ruffian!");
+		//	trace("yes, get out of here you ruffian!");
 			if(object.onExit) {
 				Level.lua.doString(object.onExit);
 			}

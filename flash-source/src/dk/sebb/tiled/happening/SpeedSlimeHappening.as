@@ -12,13 +12,6 @@ package dk.sebb.tiled.happening
 			monsterTypes = [Slime];
 			spawnMultiplier = 2;
 			speedMultiplier = 2;
-			
-			var matrix:Array = new Array();
-			matrix=matrix.concat([1.5,0,0,0,-40]);// red
-			matrix=matrix.concat([0,0,0,0,-40]);// green
-			matrix=matrix.concat([0,0,0,0,-40]);// blue
-			matrix=matrix.concat([0,0,0,1,0]);// alpha
-			filters.push(new ColorMatrixFilter(matrix));
 		}
 	}
 }

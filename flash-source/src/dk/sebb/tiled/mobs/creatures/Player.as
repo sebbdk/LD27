@@ -9,12 +9,17 @@ package dk.sebb.tiled.mobs.creatures
 	import Anim.Twirl;
 	
 	import dk.sebb.tiled.Level;
+	import dk.sebb.tiled.mobs.Bullet;
 	import dk.sebb.tiled.mobs.TileMob;
 	import dk.sebb.util.AStar;
 	import dk.sebb.util.Cell;
 	import dk.sebb.util.Key;
 	
+	import nape.callbacks.CbEvent;
 	import nape.callbacks.CbType;
+	import nape.callbacks.InteractionCallback;
+	import nape.callbacks.InteractionListener;
+	import nape.callbacks.InteractionType;
 	import nape.dynamics.InteractionGroup;
 	import nape.geom.Vec2;
 	import nape.phys.Body;
@@ -31,6 +36,8 @@ package dk.sebb.tiled.mobs.creatures
 		public var _health:int = 3;
 		public var lastHit:int = 0;
 		
+		public var onBulletListener:InteractionListener;
+		
 		public function Player()
 		{
 			super(null, 32, 0x00DD00);
@@ -44,6 +51,18 @@ package dk.sebb.tiled.mobs.creatures
 			body.allowRotation = false;
 			
 			health = 4;
+			
+			onBulletListener = new InteractionListener(CbEvent.BEGIN, 
+				InteractionType.SENSOR,
+				collisionType,
+				Bullet.collisionType,
+				onBullehit);
+			
+			Level.space.listeners.add(onBulletListener);
+		}
+		
+		private function onBullehit(evt:InteractionCallback):void {
+			trace('i was hit!!!!');
 		}
 		
 		public function damage():void {

@@ -1,6 +1,7 @@
 package dk.sebb.tiled.mobs
 {
 	import flash.events.TimerEvent;
+	import flash.filters.ColorMatrixFilter;
 	import flash.utils.Timer;
 	
 	import Anim.PlayerBullet;
@@ -36,7 +37,7 @@ package dk.sebb.tiled.mobs
  * Do not call new instave directly
  * Instead call the static getBullet method
  */
-		public function Bullet() {
+		public function Bullet(evil:Boolean = false) {
 			//set up graphic
 			addChild(new Anim.PlayerBullet());
 			
@@ -59,6 +60,14 @@ package dk.sebb.tiled.mobs
 			//prepare lifespan timer
 			lifeTimer = new Timer(lifeSpan, 1);
 			lifeTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onLifeSpanOver);
+			
+			
+			var matrix:Array = new Array();
+			matrix=matrix.concat([2,0,0,0,-80]);// red
+			matrix=matrix.concat([0,0,0,0,-40]);// green
+			matrix=matrix.concat([0,0,0,0,-40]);// blue
+			matrix=matrix.concat([0,0,0,1,0]);// alpha
+			this.filters.push(new ColorMatrixFilter(matrix));
 		}
 
 /**
