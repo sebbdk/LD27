@@ -57,6 +57,13 @@ package dk.sebb.tiled.mobs
 				onCollision);
 			Level.space.listeners.add(onCollisionListener);
 			
+			onCollisionListener = new InteractionListener(CbEvent.ONGOING, 
+				InteractionType.ANY,
+				localCollisionType,
+				ObjMob.collisionType,
+				onCollision);
+			Level.space.listeners.add(onCollisionListener);
+			
 			//prepare lifespan timer
 			lifeTimer = new Timer(lifeSpan, 1);
 			lifeTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onLifeSpanOver);
