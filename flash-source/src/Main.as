@@ -72,7 +72,7 @@ package
 			starSplash.useHandCursor = true;
 			starSplash.buttonMode = true;
 			starSplash.addEventListener(MouseEvent.CLICK, restartLevel);
-			
+
 			setTimeout(function() {
 				addChild(starSplash);
 			}, 1000);

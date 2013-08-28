@@ -46,7 +46,7 @@ package dk.sebb.tiled.mobs.creatures
 		
 		public var path:Array;
 		
-		public var _health:int = 2;
+		public var _health:int = 4;
 		public var lastHit:int = 0;
 		
 		public var created:Number;

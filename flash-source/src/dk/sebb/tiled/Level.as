@@ -1,9 +1,11 @@
 package dk.sebb.tiled
 {
+	import dk.sebb.tiled.happening.BossHappening;
 	import dk.sebb.tiled.happening.IHappening;
 	import dk.sebb.tiled.happening.MonsterHappening;
 	import dk.sebb.tiled.happening.NarrationHappening;
 	import dk.sebb.tiled.happening.SlimeHappening;
+	import dk.sebb.tiled.happening.SpeedSlimeHappening;
 	import dk.sebb.tiled.layers.Layer;
 	import dk.sebb.tiled.layers.TMXObject;
 	import dk.sebb.tiled.mobs.Bullet;
@@ -56,8 +58,10 @@ package dk.sebb.tiled
 		public static var lastShot:int;
 		
 		public var happenings:Array = [
-			new MonsterHappening(),
-			new SlimeHappening(),
+			//new MonsterHappening(),
+			//new SlimeHappening(),
+			//new SpeedSlimeHappening(),
+			new BossHappening()
 		];
 		
 		public var currentHappening:IHappening;

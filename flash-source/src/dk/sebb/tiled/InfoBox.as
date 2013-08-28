@@ -7,6 +7,7 @@ package dk.sebb.tiled
 	public class InfoBox extends Sprite
 	{
 		public var field:TextField;
+		public var skipText:TextField;
 		public var bg:Sprite = new Sprite();
 		private var format:TextFormat;
 		
@@ -32,6 +33,19 @@ package dk.sebb.tiled
 			field.x = 20;
 			field.width = 740;
 			addChild(field);
+			
+			var skipFormat:TextFormat = new TextFormat();
+			skipFormat.size = 11;
+			skipFormat.font = "courier";
+			skipText = new TextField();
+			skipText.text = "Press space to skip!";
+			skipText.setTextFormat(skipFormat);
+			skipText.y = 23;
+			skipText.x = 20;
+			skipText.width = 740;
+			skipText.x = width - skipText.textWidth - 3;
+			skipText.y = -skipText.textHeight + 3;
+			addChild(skipText);
 			
 			x = 10;
 		}
@@ -109,7 +123,6 @@ package dk.sebb.tiled
 			bg.graphics.beginFill(0xD7D5D5);
 			bg.graphics.drawRect(0, 0, 780, height);
 			bg.graphics.endFill();
-			
 			
 			y = 600 - height - 10
 		}
