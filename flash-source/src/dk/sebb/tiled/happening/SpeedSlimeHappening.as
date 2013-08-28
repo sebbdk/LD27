@@ -9,7 +9,6 @@ package dk.sebb.tiled.happening
 		public function SpeedSlimeHappening()
 		{
 			super();
-			trace('Speed slime happening!!!');
 			monsterTypes = [Slime];
 			spawnMultiplier = 2;
 			speedMultiplier = 2;

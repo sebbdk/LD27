@@ -23,6 +23,7 @@ package dk.sebb.tiled.happening
 		protected var filters:Array = [];
 		protected var amount:int = -1;
 		protected var health:int = -1;
+		protected var maxSpawn:int = 10;
 		
 		public function MonsterHappening()
 		{
@@ -30,7 +31,9 @@ package dk.sebb.tiled.happening
 		}
 		
 		public function load(itteration:int, level:Level):void {
-			var amount:int = amount !== -1 ? amount:(5 * ((itteration/2) + 1)) * spawnMultiplier;
+			var amount:int = this.amount !== -1 ? this.amount:(5 * ((itteration/2) + 1)) * spawnMultiplier;
+			amount = amount > maxSpawn ? maxSpawn:amount;
+
 			var x:int = 0;
 			while(x <= amount) {
 				var randX:int = Math.round(Math.random()*10) + 3;
