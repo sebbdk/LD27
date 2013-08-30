@@ -37,9 +37,11 @@
 			<h3 class="text-muted">Sebb Games - LD27 Reactor madness!</h3>
 		</div>
 
-		<div class="jumbotron" id="flash-container">
-
-		</div>
+		<div class="jumbotron" id="flash-container"></div>
+		<div class="alert">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<strong>Hi!</strong> Try out the post jam version <a href="#">here!</a>
+        </div>
 
 		<div class="row marketing">
 			<div class="col-lg-6">

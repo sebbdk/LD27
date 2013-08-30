@@ -814,7 +814,7 @@
   <properties>
    <property name="display" value="false"/>
   </properties>
-  <object x="136" y="254" width="15" height="13">
+  <object x="279" y="294" width="15" height="13">
    <properties>
     <property name="type" value="playerspawn"/>
    </properties>
@@ -854,11 +854,6 @@
     <property name="type" value="obj"/>
    </properties>
   </object>
-  <object name="TestNPC" x="412" y="410" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
   <object x="179" y="210" width="12" height="12">
    <properties>
     <property name="type" value="obj"/>
@@ -867,16 +862,6 @@
   <object x="133" y="212" width="17" height="11">
    <properties>
     <property name="type" value="obj"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="360" y="223" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
-   </properties>
-  </object>
-  <object name="TestNPC" x="286" y="353" width="16" height="17">
-   <properties>
-    <property name="type" value="slime"/>
    </properties>
   </object>
  </objectgroup>
