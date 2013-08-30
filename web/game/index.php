@@ -39,8 +39,7 @@
 
 		<div class="jumbotron" id="flash-container"></div>
 		<div class="alert">
-			<button type="button" class="close" data-dismiss="alert">×</button>
-			<strong>Hi!</strong> Try out the post jam version <a href="#">here!</a>
+			<strong>Hi!</strong> Try out the post jam version <a href="/flash/ld27post/web/game">here!</a>
         </div>
 
 		<div class="row marketing">
