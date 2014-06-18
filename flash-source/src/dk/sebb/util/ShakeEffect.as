@@ -1,8 +1,6 @@
 package dk.sebb.util
 {
-	import flash.display.MovieClip;
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 

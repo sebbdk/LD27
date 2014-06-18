@@ -137,21 +137,21 @@ package dk.sebb.tiled
 							addMob(objDet);
 							break;
 						case 'npc':
-							trace("NPC found! now create it!");
+							//trace("NPC found! now create it!");
 							var npc:NPC = new NPC(object);
 							npc.body.position.x = object.x + (object.width/2);
 							npc.body.position.y = object.y + (object.height/2);
 							addMob(npc);
 							break;
 						case 'slime':
-							trace("slime found! now create it!");
+							//trace("slime found! now create it!");
 							var slime:NPC = new Slime(object);
 							slime.body.position.x = object.x + (object.width/2);
 							slime.body.position.y = object.y + (object.height/2);
 							addMob(slime);
 							break;
 						case 'obj':
-							trace("Object mob found, create it!");
+							//trace("Object mob found, create it!");
 							var obj:ObjMob = new ObjMob(object);
 							obj.body.position.x = object.x + (object.width/2);
 							obj.body.position.y = object.y + (object.height/2);

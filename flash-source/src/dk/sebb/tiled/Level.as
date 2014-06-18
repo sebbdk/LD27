@@ -11,21 +11,17 @@ package dk.sebb.tiled
 	import flash.utils.setTimeout;
 	
 	import dk.sebb.tiled.happening.BossHappening;
-	import dk.sebb.tiled.happening.BulletDroneHappening;
 	import dk.sebb.tiled.happening.IHappening;
 	import dk.sebb.tiled.happening.MonsterHappening;
 	import dk.sebb.tiled.happening.NarrationHappening;
 	import dk.sebb.tiled.happening.SlimeHappening;
 	import dk.sebb.tiled.happening.SpeedSlimeHappening;
 	import dk.sebb.tiled.layers.Layer;
-	import dk.sebb.tiled.layers.TMXObject;
 	import dk.sebb.tiled.mobs.Bullet;
 	import dk.sebb.tiled.mobs.Mob;
 	import dk.sebb.tiled.mobs.creatures.NPC;
 	import dk.sebb.tiled.mobs.creatures.Player;
-	import dk.sebb.tiled.mobs.creatures.Slime;
 	import dk.sebb.util.AStar;
-	import dk.sebb.util.Cell;
 	import dk.sebb.util.Key;
 	import dk.sebb.util.SMath;
 	import dk.sebb.util.ShakeEffect;
@@ -48,8 +44,10 @@ package dk.sebb.tiled
 		public static var player:Player;
 
 		public static var screenShake:ShakeEffect;
+		public var actualX:Number = 1;
+		public var actualY:Number = 1;
 		
-		public static var timer:Timer = new Timer(1000, 10);//change me back!
+		public static var timer:Timer = new Timer(1000, 15);//change me back!
 		public static var itteration:int = 1;
 		
 		public static var kills:int = 0;
@@ -62,7 +60,7 @@ package dk.sebb.tiled
 			new MonsterHappening(),
 			new SlimeHappening(),
 			new SpeedSlimeHappening(),
-			new BossHappening(),
+			new BossHappening()
 			//new BulletDroneHappening()
 		];
 		
@@ -89,7 +87,7 @@ package dk.sebb.tiled
 		
 		private function onTimer(evt:TimerEvent):void {
 			var text:TextField  = Main.counter.getChildByName('counter') as TextField;
-			text.text = String(10 - timer.currentCount);
+			text.text = String(timer.repeatCount - timer.currentCount);
 		}
 		
 		private function nextRound(evt:TimerEvent = null):void {
@@ -100,16 +98,22 @@ package dk.sebb.tiled
 			var index:int = Math.round(Math.random() * (happenings.length-1));
 			currentHappening = happenings[index];
 			currentHappening.load(itteration, this);
-			
-			itterationConvo.load(itteration, this);
 
 			timer.reset();
 			timer.start();
 			screenShake.start(30, 2, 50);
-			itteration++;
 			
 			var text:TextField  = Main.counter.getChildByName('round') as TextField;
 			text.text = String('Round ' + SMath.zeroPad(itteration, 3));
+			
+			//catch up with th camera lerp and spew the nonsense
+			var self:Level = this;
+			var it:Number = itteration;
+			setTimeout(function():void {
+				itterationConvo.load(it, self);
+			}, 300);
+			
+			itteration++;
 		}
 		
 		public function load(levelpath:String):void {
@@ -128,6 +132,9 @@ package dk.sebb.tiled
 				//layer.displayObject.alpha = 0.5;
 				addChild(layer.displayObject);
 			}
+			
+			x = actualX = -(stage.stageWidth)/2;
+			y = actualY = -(stage.stageHeight)/2;			
 			
 			if(firstTime) {
 				firstTime = false;
@@ -173,7 +180,9 @@ package dk.sebb.tiled
 			
 			//start timer
 			var text:TextField  = Main.counter.getChildByName('counter') as TextField;
-			text.text = String(10 - timer.currentCount);
+			text.text = String(timer.repeatCount - timer.currentCount);
+			text.width = 55;
+			text.x -= 2;
 			timer.reset();
 			timer.start();
 			
@@ -234,6 +243,13 @@ package dk.sebb.tiled
 			settings.pause = false;
 		}
 		
+		public function lerp( amount:Number , start:Number, end:Number ):Number {
+			if ( start == end )  {
+				return start ;
+			}
+			return ( ( 1 - amount ) * start ) + ( amount * end ) ;
+		};
+		
 		public function run(evt:Event = null):void {
 			var deltaTime:Number = (getTimer() - lastFrameTime) / (1000/30);
 			if(!settings.pause && deltaTime > 1) {
@@ -245,8 +261,10 @@ package dk.sebb.tiled
 				}
 				
 				//move "camera" onto player
-				x = (-(player.body.position.x * scaleX) + stage.stageWidth/2) + screenShake.offSetX;
-				y = (-(player.body.position.y * scaleY) + stage.stageHeight/2) + screenShake.offSetY;
+				actualX = lerp( 0.3 , actualX, -(player.body.position.x * scaleX) + stage.stageWidth/2);
+				actualY = lerp( 0.3 , actualY, -(player.body.position.y * scaleY) + stage.stageHeight/2);
+				x = actualX + screenShake.offSetX;
+				y = actualY + screenShake.offSetY;
 					
 				//update parallax
 				for each(var layer:Layer in data.parallaxLayers) {
@@ -271,44 +289,49 @@ package dk.sebb.tiled
 		}
 		
 		public function isDownCheck():void {
-			if(getTimer() - lastShot > 100) {
+			if(getTimer() - lastShot > 300) {
+				lastShot = getTimer();
+				var b:Bullet;
+
 				if(Key.isDown(Keyboard.UP)) {
-					var b:Bullet = new Bullet();
+					b = new Bullet();
 					b.body.group = player.body.group;
 					b.body.position.setxy(player.body.position.x, player.body.position.y - 12);
 					b.fire(0, -1);
 					addChild(b);
 					data.addMob(b);
+					return;
 				}
 				
 				if(Key.isDown(Keyboard.DOWN)) {
-					var b:Bullet = new Bullet();
+					b = new Bullet();
 					b.body.group = player.body.group;
 					b.body.position.setxy(player.body.position.x, player.body.position.y - 12);
 					b.fire(0, 1);
 					addChild(b);
 					data.addMob(b);
+					return;
 				}
 				
 				if(Key.isDown(Keyboard.LEFT)) {
-					var b:Bullet = new Bullet();
+					b = new Bullet();
 					b.body.group = player.body.group;
 					b.body.position.setxy(player.body.position.x, player.body.position.y - 12);
 					b.fire(-1, 0);
 					addChild(b);
-					data.addMob(b)
+					data.addMob(b);
+					return;
 				}
 				
 				if(Key.isDown(Keyboard.RIGHT)) {
-					var b:Bullet = new Bullet();
+					b = new Bullet();
 					b.body.group = player.body.group;
 					b.body.position.setxy(player.body.position.x, player.body.position.y - 12);
 					b.fire(1, 0);
 					addChild(b);
 					data.addMob(b);
+					return;
 				}
-				
-				lastShot = getTimer();
 			}
 		}
 

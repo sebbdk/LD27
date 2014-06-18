@@ -30,6 +30,8 @@ package
 		public static var counter:MovieClip;
 		public static var starSplash:MovieClip;
 		
+		public static var UI:MovieClip;
+		
 /**
  * Load the first level right away!
  */
@@ -39,8 +41,8 @@ package
 			Key.init(stage);
 			level = new Level();
 			addChild(level);
-			 
 			loadNextLevel();
+			
 			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			
 			gameOver = new Anim.Gameover();
@@ -57,12 +59,10 @@ package
 			healthbar = new MovieClip();
 			healthbar.y = 90;
 			healthbar.x = stage.stageWidth - 220;
-			addChild(healthbar);
 			
 			counter = new Anim.Counter();
 			counter.x = stage.stageWidth - counter.width - 20;
 			counter.y = 20;
-			addChild(counter);
 			
 			starSplash = new StartGame();
 			starSplash.x = stage.stageWidth/2;
@@ -73,14 +73,19 @@ package
 			starSplash.buttonMode = true;
 			starSplash.addEventListener(MouseEvent.CLICK, restartLevel);
 
-			setTimeout(function() {
-				addChild(starSplash);
-			}, 1000);
+			UI = new MovieClip();
+			UI.addChild(counter);
+			UI.addChild(healthbar);
+			addChild(UI);
+			UI.visible = false;
+			
+			addChild(starSplash);
 		} 
 		
 		public function restartLevel(evt:Event):void {
 			starSplash.visible = false;
 			gameOver.visible = false;
+			UI.visible = true;
 			level.unload();
 			level.load(levels[levelindex]);
 		}

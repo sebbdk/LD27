@@ -102,11 +102,11 @@ package dk.sebb.tiled.mobs.creatures
 		}
 		
 		public function onBullehit(collision:InteractionCallback):void {
-			damage();
+			damage(2);
 		}
 		
-		public function damage():void {
-			health--;
+		public function damage(amount:int = 1):void {
+			health -= amount;
 			lastHit = getTimer();
 		}
 		

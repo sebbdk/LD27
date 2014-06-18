@@ -1,6 +1,8 @@
 package dk.sebb.tiled.happening
 {
 	
+	import flash.geom.Point;
+	
 	import dk.sebb.tiled.Level;
 	import dk.sebb.tiled.layers.TMXObject;
 	import dk.sebb.tiled.mobs.creatures.NPC;
@@ -38,6 +40,8 @@ package dk.sebb.tiled.happening
 				var randX:int = Math.round(Math.random()*10) + 3;
 				var randY:int = Math.round(Math.random()*10) + 3;
 				
+
+				
 				if(AStar.getInstance().getCellFromCoords(Vec2.get(randX*32+5, randY*32+5)).cellType === Cell.CELL_FILLED) {
 					continue;
 				}
@@ -46,6 +50,11 @@ package dk.sebb.tiled.happening
 				var mob:NPC = new monsterTypes[type](new TMXObject());
 				mob.body.position.x = randX*32 + 16;
 				mob.body.position.y = randY*32 + 16;
+				
+				if(Vec2.distance(mob.body.position, Level.player.body.position) < 90) {
+					continue;
+				}
+				
 				mob.filters = filters.length > 0 ? filters:mob.filters;
 				mob.speed *= speedMultiplier;
 				mob.health = health != -1 ? health:mob.health;
@@ -55,6 +64,7 @@ package dk.sebb.tiled.happening
 				x++;
 			}
 		}
+
 		public function unload():void {}
 	}
 }

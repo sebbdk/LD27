@@ -91,6 +91,7 @@ package dk.sebb.tiled.mobs.creatures
 			if(_health <= 0) {
 				Level.pause();
 				Main.gameOver.visible = true;
+				Main.UI.visible = false;
 				saveScore();
 			}
 		}
@@ -138,17 +139,9 @@ package dk.sebb.tiled.mobs.creatures
 			
 			var vec:Vec2 = body.localVectorToWorld(new Vec2(kx, ky));
 			body.force = vec;
-			//if(kx == 0 && ky == 0) {
-				//vec.setxy(kx * 0.9, ky * 0.9)
-				//body.velocity = vec;
-			//}
-			//body.applyImpulse(vec);
 			
 			body.velocity = vec;
 			body.kinematicVel= new Vec2(-kx*3, -ky*3);
-			//trace(body.kinematicVel);
-			//body.kinematicVel.x -= vaultForce.x * 2;
-			//body.kinematicVel.y -= vaultForce.y * 2;
 			
 			var isMoving:Boolean = (ky !== 0 || kx !== 0);
 
@@ -157,7 +150,6 @@ package dk.sebb.tiled.mobs.creatures
 				MovieClip(animator.getChildAt(0)).gotoAndStop(0);
 				currentAnimation = "";
 			}
-			
 
 			//set graphics scale
 			if(isMoving && kx < 0) {

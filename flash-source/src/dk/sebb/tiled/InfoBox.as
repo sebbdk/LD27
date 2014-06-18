@@ -69,27 +69,6 @@ package dk.sebb.tiled
 			} else {
 				trace('tried to init none existant conversation "' + id + '"');	
 			}
-			
-			
-			/*
-			return;
-			trace('Initiate convo with id:', id, pause);
-			if(Level.data.conversations && Level.data.conversations[id] && id != currentConvo) {
-				trace("OPEN INFO!");
-				var lines:String = "";
-				for each(var stmtnt:Object in Level.data.conversations[id].statements) {
-					lines += Level.data.people[stmtnt.person].name + ": " + stmtnt.text + "\n";
-				}
-				
-				Level.pause();
-				write(lines);
-				currentConvo = id;
-			} else {
-				currentConvo = "";
-				Level.unPause();
-				visible = false;
-			}
-			*/
 		}
 		
 		public function convoNext():void {

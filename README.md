@@ -1,4 +1,3 @@
-LD27
+LD27 Entry
 ====
 
-This will be the repo for my LD27 entry.

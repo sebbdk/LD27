@@ -40,6 +40,8 @@ package dk.sebb.tiled.mobs
 		public function Bullet(evil:Boolean = false) {
 			//set up graphic
 			addChild(new Anim.PlayerBullet());
+			this.scaleX = 1.5;
+			this.scaleY = 1.5;
 			
 			//setup physics body
 			body = new Body(BodyType.DYNAMIC, new Vec2(0, 0));
@@ -112,6 +114,8 @@ package dk.sebb.tiled.mobs
 			lifeTimer.reset();
 			lifeTimer.delay = lifeSpan;
 			lifeTimer.start();
+			
+			Level.screenShake.start(5, 2, 5);
 		}
 
 /**
