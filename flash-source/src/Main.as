@@ -7,7 +7,6 @@ package
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.ui.Keyboard;
-	import flash.utils.setTimeout;
 	
 	import Anim.Counter;
 	import Anim.Gameover;

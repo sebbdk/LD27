@@ -4,6 +4,7 @@
     <compilerSourcePath>
       <compilerSourcePathEntry kind="1" linkType="1" path="lib/Hi-res-Stats/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="lib/AS3TMXLoader"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="lib/GreenSock/src"/>
     </compilerSourcePath>
     <libraryPath defaultLinkType="0">
       <libraryPathEntry kind="4" path="">
@@ -43,8 +44,3 @@
   <buildCSSFiles/>
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
 </actionScriptProperties>
-
-
-
-
-

@@ -1,10 +1,16 @@
 package dk.sebb.tiled.mobs
 {
+	import com.greensock.TweenLite;
+	
+	import flash.display.MovieClip;
 	import flash.events.TimerEvent;
 	import flash.filters.ColorMatrixFilter;
 	import flash.utils.Timer;
+	import flash.utils.setTimeout;
 	
 	import Anim.PlayerBullet;
+	
+	import Graph.Whitesplosion;
 	
 	import dk.sebb.tiled.Level;
 	
@@ -32,6 +38,9 @@ package dk.sebb.tiled.mobs
 		
 		public static var pool:Array = [];
 		public static var poolLimit:int = 80;
+		
+		public var explosion:MovieClip = new Graph.Whitesplosion();
+		public var bullet:MovieClip = new Anim.PlayerBullet();
 
 /**
  * Do not call new instave directly
@@ -39,7 +48,7 @@ package dk.sebb.tiled.mobs
  */
 		public function Bullet(evil:Boolean = false) {
 			//set up graphic
-			addChild(new Anim.PlayerBullet());
+			addChild(bullet);
 			this.scaleX = 1.5;
 			this.scaleY = 1.5;
 			
@@ -50,6 +59,12 @@ package dk.sebb.tiled.mobs
 			body.allowRotation = false;
 			body.cbTypes.add(collisionType);
 			body.cbTypes.add(localCollisionType);
+			
+			//add explosion
+			explosion.scaleX = 0.5;
+			explosion.scaleY = 0.5;
+			explosion.alpha = 0;
+			addChild(explosion);
 			
 			//setup interaction listener
 			onCollisionListener = new InteractionListener(CbEvent.ONGOING, 
@@ -109,13 +124,14 @@ package dk.sebb.tiled.mobs
 			this.directionY = directionY;
 			this.speed = speed;
 			
+			bullet.visible = true;
 			body.rotation = Math.atan2(directionY*-1, directionX*-1);
 			
 			lifeTimer.reset();
 			lifeTimer.delay = lifeSpan;
 			lifeTimer.start();
 			
-			Level.screenShake.start(5, 2, 5);
+			//Level.screenShake.start(5, 2, 5);
 		}
 
 /**
@@ -123,7 +139,10 @@ package dk.sebb.tiled.mobs
  * @return void
  */
 		public override function update():void {
-			super.update();
+			x = body.position.x;
+			y = body.position.y;
+			rotation = body.rotation * 180 / Math.PI;
+			
 			body.velocity.setxy(directionX*speed, directionY*speed);
 		}
 
@@ -133,7 +152,17 @@ package dk.sebb.tiled.mobs
  * @return void
  */
 		private function onCollision(collision:InteractionCallback):void {
-			unload();
+			body.space = null;
+			bullet.visible = false;
+			explosion.alpha = 1;
+			explosion.scaleX = explosion.scaleY = 0.4 + 0.3 * Math.random();
+			body.velocity.setxy(0,0);
+			explosion.x = -3 + (6 * Math.random());
+			explosion.y = -3 + (6 * Math.random());
+
+				TweenLite.to(explosion, 0.5, {alpha:0, complete:function():void {
+					unload();
+				}});
 		}
 
 /**

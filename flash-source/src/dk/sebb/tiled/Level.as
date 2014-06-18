@@ -70,7 +70,7 @@ package dk.sebb.tiled
 		public var firstTime:Boolean = true;
 		
 		public static var settings:Object = {
-			debug:false,
+			debug:true,
 			pause:false
 		};
 		

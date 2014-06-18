@@ -6,15 +6,21 @@ Changes:
 	* Added camera lerp
 	* Changed timing on convo dialogs to match lerp
 	* UI elements are now hidden on gameover/startscreen
-	* Added small screenshake when shooting
 	* Mobs now spawn some distance away, no more instant deaths because a monster spawned on top of you
+	* Added explosions on bullet hit
 
 Todo changes:
+	Bullets should not collide with invisible walls
+	Gradual mob spawnage instead of spawnin all at once when a happening starts
+	Better level loading
+	Muzzle flash when shooting
+
+Features / new content
+	Create a 'hide' happening forcing the player to use the bushes
+	Create loot
+	Change batteries to a healthbar
 	Bullet sounds
 	Music
-	persistant state AKA corpses
-	Bullets should not collide with invisible walls
-	Gradual mob spawnage instead of spawnin all each happening
+	Persistant state AKA corpses
 	Highscore
-	Better level loading
 	Better startscreen
