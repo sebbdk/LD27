@@ -6,7 +6,6 @@ package dk.sebb.tiled.mobs
 	import flash.events.TimerEvent;
 	import flash.filters.ColorMatrixFilter;
 	import flash.utils.Timer;
-	import flash.utils.setTimeout;
 	
 	import Anim.PlayerBullet;
 	
@@ -19,6 +18,7 @@ package dk.sebb.tiled.mobs
 	import nape.callbacks.InteractionCallback;
 	import nape.callbacks.InteractionListener;
 	import nape.callbacks.InteractionType;
+	import nape.dynamics.InteractionGroup;
 	import nape.geom.Vec2;
 	import nape.phys.Body;
 	import nape.phys.BodyType;
@@ -31,10 +31,17 @@ package dk.sebb.tiled.mobs
 		public var onCollisionListener:InteractionListener;
 		public var lifeTimer:Timer
 		
+		public static var group:InteractionGroup = new InteractionGroup(true);
+		
 		public var directionX:int = 0;
 		public var directionY:int = 0;
+		
+		public var originX:int = 0;
+		public var originY:int = 0;		
+		
 		public var speed:Number = 0;
-		public var lifeSpan:int = 5000;
+		public var lifeSpan:int = 700;
+		public var maxDistance:int = 96;
 		
 		public static var pool:Array = [];
 		public static var poolLimit:int = 80;
@@ -55,16 +62,20 @@ package dk.sebb.tiled.mobs
 			//setup physics body
 			body = new Body(BodyType.DYNAMIC, new Vec2(0, 0));
 			poly = new Polygon(Polygon.box(width, height));
+			poly.sensorEnabled = true;
 			body.shapes.add(poly);
 			body.allowRotation = false;
 			body.cbTypes.add(collisionType);
 			body.cbTypes.add(localCollisionType);
 			
+			body.group = group;
+
 			//add explosion
 			explosion.scaleX = 0.5;
 			explosion.scaleY = 0.5;
 			explosion.alpha = 0;
 			addChild(explosion);
+			
 			
 			//setup interaction listener
 			onCollisionListener = new InteractionListener(CbEvent.ONGOING, 
@@ -80,6 +91,7 @@ package dk.sebb.tiled.mobs
 				ObjMob.collisionType,
 				onCollision);
 			Level.space.listeners.add(onCollisionListener);
+			
 			
 			//prepare lifespan timer
 			lifeTimer = new Timer(lifeSpan, 1);
@@ -119,12 +131,15 @@ package dk.sebb.tiled.mobs
  * @param  speed      Number
  * @return void
  */
-		public function fire(directionX:int, directionY:int, speed:Number = 150):void {
+		public function fire(originX:Number, originY:Number, directionX:int, directionY:int, speed:Number = 150):void {
 			this.directionX = directionX; 
 			this.directionY = directionY;
+			this.originX = originX;
+			this.originY = originY;
 			this.speed = speed;
 			
 			bullet.visible = true;
+			body.position.setxy(originX, originY);
 			body.rotation = Math.atan2(directionY*-1, directionX*-1);
 			
 			lifeTimer.reset();
@@ -155,14 +170,17 @@ package dk.sebb.tiled.mobs
 			body.space = null;
 			bullet.visible = false;
 			explosion.alpha = 1;
-			explosion.scaleX = explosion.scaleY = 0.4 + 0.3 * Math.random();
+			explosion.scaleX = explosion.scaleY = 0.2;
 			body.velocity.setxy(0,0);
 			explosion.x = -3 + (6 * Math.random());
 			explosion.y = -3 + (6 * Math.random());
 
-				TweenLite.to(explosion, 0.5, {alpha:0, complete:function():void {
-					unload();
-				}});
+			var scale:Number = 0.6 + 0.4 * Math.random();
+			explosion.scaleX = explosion.scaleY = 0.1;
+			TweenLite.to(explosion, 0.1, {scaleX:scale, scaleY:scale});
+			TweenLite.to(explosion, 0.4, {alpha:0, complete:function():void {
+				unload();
+			}});
 		}
 
 /**

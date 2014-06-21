@@ -5,8 +5,6 @@ package dk.sebb.tiled.happening
 	public class NarrationHappening implements IHappening
 	{
 		public var conversations:Array = [
-			'convo01',
-			null,
 			'convo02',
 			null,
 			'convo03'

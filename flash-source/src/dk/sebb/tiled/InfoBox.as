@@ -58,7 +58,8 @@ package dk.sebb.tiled
 		 * pause: wether or not to pause the game while the conversation takes place
 		 * */
 		public function convo(id:String, pause:Boolean = true):void {
-			if(Level.data.conversations[id]) {
+			var convoID:String = Level.data.conversations[id];
+			if(convoID && !hasConvo) {
 				hasConvo = true;
 				visible = true;
 				currentConvo = id;
@@ -74,9 +75,15 @@ package dk.sebb.tiled
 		public function convoNext():void {
 			if(currentConvo !== "" && Level.data.conversations[currentConvo]) {
 				var stmtnt:Object = Level.data.conversations[currentConvo].statements[currentConvoIndex];
+
 				if(stmtnt) {
 					hasConvo = true;
 					write(Level.data.people[stmtnt.person].name + ": " + stmtnt.text + "\n");
+					
+					if(stmtnt.script) {
+						Level.lua.doString(stmtnt.script);
+					}
+					
 					currentConvoIndex++;
 				} else {
 					hasConvo = false;

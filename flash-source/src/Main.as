@@ -6,6 +6,7 @@ package
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.text.TextField;
 	import flash.ui.Keyboard;
 	
 	import Anim.Counter;
@@ -40,9 +41,9 @@ package
 			Key.init(stage);
 			level = new Level();
 			addChild(level);
-			loadNextLevel();
 			
 			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+			level.addEventListener(Event.COMPLETE, onLevelLoaded);
 			
 			gameOver = new Anim.Gameover();
 			gameOver.x = stage.stageWidth/2;
@@ -78,12 +79,21 @@ package
 			addChild(UI);
 			UI.visible = false;
 			
-			addChild(starSplash);
+			//Start this shinanigan!
+			loadNextLevel();
 		} 
+		
+		protected function onLevelLoaded(evt:Event):void {
+			addChild(starSplash);
+			trace('loaded level?!?!?!');
+		}
 		
 		public function restartLevel(evt:Event):void {
 			starSplash.visible = false;
 			gameOver.visible = false;
+			trace(gameOver);
+			trace(gameOver.getChildByName('scoretext'));
+			TextField(gameOver.getChildByName('scoretext')).text = "Score: " + (Level.kills + Level.itteration * 10);
 			UI.visible = true;
 			level.unload();
 			level.load(levels[levelindex]);
@@ -95,6 +105,10 @@ package
  */
 		public function loadNextLevel():void {
 			if(levels[levelindex+1]) {
+				if(starSplash.parent) {
+					removeChild(starSplash);
+				}
+				
 				levelindex++;
 				level.unload();
 				level.load(levels[levelindex]);
@@ -106,6 +120,10 @@ package
  */		
 		public function loadPrevLevel():void {
 			if(levels[levelindex-1]) {
+				if(starSplash.parent) {
+					removeChild(starSplash);
+				}
+
 				levelindex--;
 				level.unload();
 				level.load(levels[levelindex]);

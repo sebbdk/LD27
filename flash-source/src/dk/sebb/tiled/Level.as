@@ -8,7 +8,6 @@ package dk.sebb.tiled
 	import flash.ui.Keyboard;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
-	import flash.utils.setTimeout;
 	
 	import dk.sebb.tiled.happening.BossHappening;
 	import dk.sebb.tiled.happening.IHappening;
@@ -19,6 +18,7 @@ package dk.sebb.tiled
 	import dk.sebb.tiled.layers.Layer;
 	import dk.sebb.tiled.mobs.Bullet;
 	import dk.sebb.tiled.mobs.Mob;
+	import dk.sebb.tiled.mobs.ObjMob;
 	import dk.sebb.tiled.mobs.creatures.NPC;
 	import dk.sebb.tiled.mobs.creatures.Player;
 	import dk.sebb.util.AStar;
@@ -90,7 +90,7 @@ package dk.sebb.tiled
 			text.text = String(timer.repeatCount - timer.currentCount);
 		}
 		
-		private function nextRound(evt:TimerEvent = null):void {
+		public function nextRound(evt:TimerEvent = null):void {
 			if(currentHappening) {
 				currentHappening.unload();
 			}
@@ -106,12 +106,8 @@ package dk.sebb.tiled
 			var text:TextField  = Main.counter.getChildByName('round') as TextField;
 			text.text = String('Round ' + SMath.zeroPad(itteration, 3));
 			
-			//catch up with th camera lerp and spew the nonsense
 			var self:Level = this;
 			var it:Number = itteration;
-			setTimeout(function():void {
-				itterationConvo.load(it, self);
-			}, 300);
 			
 			itteration++;
 		}
@@ -126,7 +122,6 @@ package dk.sebb.tiled
 		}
 		
 		public function onLevelLoaded(evt:Event):void {
-			
 			//add layers!
 			for each(var layer:Layer in data.tmxLoader.layers) {
 				//layer.displayObject.alpha = 0.5;
@@ -137,6 +132,7 @@ package dk.sebb.tiled
 			y = actualY = -(stage.stageHeight)/2;			
 			
 			if(firstTime) {
+				dispatchEvent(new Event(Event.COMPLETE));
 				firstTime = false;
 				return;
 			}
@@ -184,16 +180,12 @@ package dk.sebb.tiled
 			text.width = 55;
 			text.x -= 2;
 			timer.reset();
-			timer.start();
 			
 			//reset score
 			kills = 0;
 			itteration = 0;
 			
 			var self:Level = this;
-			setTimeout(function():void {
-				nextRound();
-			}, 200);
 		}
 		
 		public function unload():void {
@@ -221,6 +213,11 @@ package dk.sebb.tiled
 							Level.lua.doString(NPC(mob).object.onActivate);
 							return;
 						}
+						
+						if(mob is ObjMob && ObjMob(mob).playerIsTouching && ObjMob(mob).object.onActivate) {
+							Level.lua.doString(ObjMob(mob).object.onActivate);
+							return;
+						}
 					}
 				}
 			}
@@ -240,6 +237,7 @@ package dk.sebb.tiled
 		
 		public static function unPause():void {
 			timer.start();
+
 			settings.pause = false;
 		}
 		
@@ -253,7 +251,7 @@ package dk.sebb.tiled
 		public function run(evt:Event = null):void {
 			var deltaTime:Number = (getTimer() - lastFrameTime) / (1000/30);
 			if(!settings.pause && deltaTime > 1) {
-				//FIXX ME!
+				//FIX ME!
 				space.step((1/30) * deltaTime, 10, 10);
 				
 				for each(var mob:Mob in data.mobs) {
@@ -289,48 +287,36 @@ package dk.sebb.tiled
 		}
 		
 		public function isDownCheck():void {
-			if(getTimer() - lastShot > 300) {
-				lastShot = getTimer();
+			if(getTimer() - lastShot > 500) {
 				var b:Bullet;
-
+				var direction:Vec2 = null;
 				if(Key.isDown(Keyboard.UP)) {
-					b = new Bullet();
-					b.body.group = player.body.group;
-					b.body.position.setxy(player.body.position.x, player.body.position.y - 12);
-					b.fire(0, -1);
-					addChild(b);
-					data.addMob(b);
-					return;
+					direction = new Vec2(0, -1);
 				}
 				
 				if(Key.isDown(Keyboard.DOWN)) {
-					b = new Bullet();
-					b.body.group = player.body.group;
-					b.body.position.setxy(player.body.position.x, player.body.position.y - 12);
-					b.fire(0, 1);
-					addChild(b);
-					data.addMob(b);
-					return;
+					direction = new Vec2(0, 1);
 				}
 				
 				if(Key.isDown(Keyboard.LEFT)) {
-					b = new Bullet();
-					b.body.group = player.body.group;
-					b.body.position.setxy(player.body.position.x, player.body.position.y - 12);
-					b.fire(-1, 0);
-					addChild(b);
-					data.addMob(b);
-					return;
+					direction = new Vec2(-1, 0);
 				}
 				
 				if(Key.isDown(Keyboard.RIGHT)) {
+					direction = new Vec2(1, 0);
+				}
+				
+				if(direction) {
 					b = new Bullet();
-					b.body.group = player.body.group;
-					b.body.position.setxy(player.body.position.x, player.body.position.y - 12);
-					b.fire(1, 0);
+					b.fire(player.body.position.x, player.body.position.y - 30, direction.x, direction.y);
 					addChild(b);
 					data.addMob(b);
-					return;
+					player.musselFlash();
+					
+					direction.length = -5;
+					player.body.position = player.body.position.add(direction);
+					
+					lastShot = getTimer();
 				}
 			}
 		}

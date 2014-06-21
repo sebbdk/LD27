@@ -9,6 +9,7 @@ package dk.sebb.tiled
 	import dk.sebb.tiled.layers.ObjectLayer;
 	import dk.sebb.tiled.layers.TMXObject;
 	import dk.sebb.tiled.mobs.Bullet;
+	import dk.sebb.tiled.mobs.DetectorMob;
 	import dk.sebb.tiled.mobs.Mob;
 	import dk.sebb.tiled.mobs.ObjMob;
 	import dk.sebb.tiled.mobs.PhysMob;
@@ -131,7 +132,7 @@ package dk.sebb.tiled
 							spawns.push(new Vec2(object.x + (object.width/2), object.y + (object.height/2)));
 							break;
 						case 'detector':
-							var objDet:ObjMob = new ObjMob(object, true);
+							var objDet:DetectorMob = new DetectorMob(object, true);
 							objDet.body.position.x = object.x + (object.width/2);
 							objDet.body.position.y = object.y + (object.height/2);
 							addMob(objDet);

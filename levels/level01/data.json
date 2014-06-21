@@ -4,7 +4,7 @@
 			"name":"Narrator"
 		},
 		{
-			"name":"Bill Port",
+			"name":"You",
 			"isPlayer":true
 		},
 		{
@@ -12,33 +12,16 @@
 		}
 	],
 	"conversations":{
-		"convo01":{
-			"pause":true,
-			"statements":[
-				{
-					"person":0,
-					"text":"In a not so ordinary place a entity suddonly appears. "
-				},
-				{
-					"person":0,
-					"text":"he entity knows not who/what/where he is,\nthe only thing he knows is that that big blue thing is important. "
-				},
-				{
-					"person":0,
-					"text":"A moment later portals open up and creatures come out,\nthey charge him, leaving him no other option than to fight to protect himself,\nand the precious blue structure... "
-				}
-			]
-		},
 		"convo02":{
 			"pause":true,
 			"statements":[
 				{
-					"person":2,
-					"text":"You can do this, keep at it!"
+					"person":1,
+					"text":"Pressing that button was clearly a phallus decision.."
 				},
 				{
-					"person":2,
-					"text":"whack em good! ... eh shoot em good!"
+					"person":1,
+					"text":"Gotta shoot em all!"
 				}
 			]
 		},
@@ -46,12 +29,39 @@
 			"pause":true,
 			"statements":[
 				{
-					"person":2,
-					"text":"Use the bushes!"
+					"person":1,
+					"text":"These bushes seem useful"
 				},
 				{
-					"person":2,
-					"text":"They cannot see you if you stand behind a bush"
+					"person":1,
+					"text":"They seem to forget about me like lemmings when i go behind one..."
+				}
+			]
+		},
+		"gamestart":{
+			"pause":true,
+			"statements":[
+				{
+					"person":1,
+					"text":"I wonder what this button does.."
+				},
+				{
+					"person":1,
+					"text":"*You press the button*"
+				},
+				{
+					"person":1,
+					"text":"That might not have been a good idea..",
+					"script":"startSpawning()"
+				}
+			]
+		},
+		"thething":{
+			"pause":true,
+			"statements":[
+				{
+					"person":1,
+					"text":"I really, should'nt have pressed that button..."
 				}
 			]
 		}

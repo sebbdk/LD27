@@ -13,6 +13,10 @@ package dk.sebb.tiled
 				function hideInfo(a)
 					as3.class.dk.sebb.tiled.LuaInterface.hideInfo(a);
 				end
+
+				function startSpawning()
+					as3.class.dk.sebb.tiled.LuaInterface.startSpawning();
+				end
 				
 				function convo(id, pause)
 					pause = pause or true;
@@ -26,6 +30,10 @@ package dk.sebb.tiled
 					as3.class.dk.sebb.tiled.LuaInterface.shake(magnitude, delay, repeatCount);
 				end
 			]]>).toString() );
+		}
+		
+		public static function startSpawning():void {
+			Level.instance.nextRound();
 		}
 
 		public static function convo(id:String, pause:Boolean = true):void {

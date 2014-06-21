@@ -1,8 +1,8 @@
 package dk.sebb.tiled.happening
 {
-	import dk.sebb.tiled.mobs.creatures.Slime;
+	import flash.filters.GlowFilter;
 	
-	import flash.filters.ColorMatrixFilter;
+	import dk.sebb.tiled.mobs.creatures.Slime;
 	
 	public class SpeedSlimeHappening extends MonsterHappening
 	{

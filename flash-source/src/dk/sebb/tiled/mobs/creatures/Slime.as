@@ -11,7 +11,7 @@ package dk.sebb.tiled.mobs.creatures
 		public function Slime(object:TMXObject)
 		{
 			super(object, new Rectangle(0, 0, 8, 8));
-			speed += Math.random()*20;
+			speed = 20 + Math.random()*10;
 			health = 1;
 		}
 		

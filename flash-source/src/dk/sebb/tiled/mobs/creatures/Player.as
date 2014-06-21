@@ -1,12 +1,17 @@
 package dk.sebb.tiled.mobs.creatures
 {
+	import com.greensock.TweenLite;
+	
 	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	import flash.external.ExternalInterface;
 	import flash.ui.Keyboard;
 	import flash.utils.getTimer;
 	
 	import Anim.Battery;
 	import Anim.Twirl;
+	
+	import Graph.Whitesplosion;
 	
 	import dk.sebb.tiled.Level;
 	import dk.sebb.tiled.mobs.Bullet;
@@ -36,15 +41,20 @@ package dk.sebb.tiled.mobs.creatures
 		public var _health:int = 3;
 		public var lastHit:int = 0;
 		
+		public var flashGraphic:MovieClip = new Graph.Whitesplosion();
+		
 		public var onBulletListener:InteractionListener;
+		
+		public var explosion:MovieClip = new Graph.Whitesplosion();
+		public var exclamation:Sprite;
 		
 		public function Player()
 		{
 			super(null, 32, 0x00DD00);
 			body = new Body(BodyType.DYNAMIC, new Vec2(0, 0));
-			poly = new Polygon(Polygon.box(10,10));
-			body.group = new InteractionGroup();
-			body.group.ignore = true;
+			poly = new Polygon(Polygon.box(7,10));
+			poly.translate(new Vec2(0, -5));
+			body.group = new InteractionGroup(true);
 			body.cbTypes.add(collisionType);
 
 			body.shapes.add(poly);
@@ -65,12 +75,26 @@ package dk.sebb.tiled.mobs.creatures
 			trace('i was hit!!!!');
 		}
 		
-		public function damage():void {
-			if(getTimer() - lastHit > 500) {
-				health--;
-				lastHit = getTimer();
-				Level.screenShake.start(10);
+		public function musselFlash():void {
+			var scale:Number = 1;
+
+			flashGraphic.alpha = 1;
+			flashGraphic.scaleX = flashGraphic.scaleY = 0.1;
+			TweenLite.to(flashGraphic, 0.3, { scaleX:scale, scaleY:scale});
+			TweenLite.to(flashGraphic, 0.3, { alpha:0});
+			
+			flashGraphic.x = this.x;
+			flashGraphic.y = this.y;
+			
+			if(!flashGraphic.parent && this.parent !== null) {
+				this.parent.addChild(flashGraphic); 
 			}
+		}
+		
+		public function damage():void {
+			health--;
+			lastHit = getTimer();
+			Level.screenShake.start(10);
 		}
 		
 		public function get health():int {
@@ -104,7 +128,29 @@ package dk.sebb.tiled.mobs.creatures
 		
 		public override function draw():void {
 			animator = new Anim.Twirl();
+			animator.y = animator.height;
 			addChild(animator);
+			
+			//add explosion
+			flashGraphic.scaleX = 0.3;
+			flashGraphic.scaleY = 0.3;
+			flashGraphic.y = 28;
+			flashGraphic.alpha = 0;
+			
+			//draw exclamation
+			exclamation = new Sprite();
+			exclamation.graphics.beginFill(0xFFA600);
+			exclamation.graphics.drawRect(0, 0, 2, 2);
+			exclamation.graphics.endFill();
+			
+			exclamation.graphics.beginFill(0xFFA600);
+			exclamation.graphics.drawRect(0, -7, 2, 5);
+			exclamation.graphics.endFill();
+			exclamation.x = -1;
+			exclamation.y = -4;
+			exclamation.visible = false;
+			
+			addChild(exclamation);
 		}
 		
 		public override function update():void {
@@ -119,7 +165,7 @@ package dk.sebb.tiled.mobs.creatures
 			var kx:int = 0;
 			var ky:int = 0;
 			
-			var vel:int = 60;
+			var vel:int = 80;
 			
 			if(Key.isDown(Keyboard.D)) {
 				kx += vel;

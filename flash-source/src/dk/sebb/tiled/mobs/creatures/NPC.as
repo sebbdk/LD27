@@ -1,9 +1,16 @@
 package dk.sebb.tiled.mobs.creatures
 {
+	import com.greensock.TweenLite;
+	
 	import flash.display.MovieClip;
+	import flash.display.Shape;
+	import flash.events.Event;
+	import flash.filters.ColorMatrixFilter;
+	import flash.filters.GlowFilter;
 	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.utils.getTimer;
+	import flash.utils.setTimeout;
 	
 	import Anim.BlueGuy;
 	
@@ -34,6 +41,7 @@ package dk.sebb.tiled.mobs.creatures
 		public var onEnterListener:InteractionListener;
 		public var onLeaveListener:InteractionListener;
 		public var onBulletListener:InteractionListener;
+		public static var NPCcollisionType:CbType = new CbType();
 		public var collisionType:CbType = new CbType();
 
 		public var direction:Vec2 = new Vec2();
@@ -47,9 +55,18 @@ package dk.sebb.tiled.mobs.creatures
 		public var path:Array;
 		
 		public var _health:int = 4;
+		public var maxHealth:int = 4;
 		public var lastHit:int = 0;
 		
+		public var attackCooldown:int = 2000;
+		public var lastAttack:int = 0;
+		public var isAttacking:Boolean = false;
+		public var lastDamage:Number;
+		
 		public var created:Number;
+		
+		public var portal:MovieClip = new Anim.Portal();
+		public var healthBar:MovieClip = new MovieClip();
 		
 		public function NPC(object:TMXObject, colRect:Rectangle = null)
 		{
@@ -59,9 +76,11 @@ package dk.sebb.tiled.mobs.creatures
 			
 			this.object = object;
 			draw();
+			drawHealthbar();
 			
 			body = new Body(BodyType.DYNAMIC, new Vec2(0, 0));
 			body.allowRotation = false;
+			body.cbTypes.add(NPCcollisionType);
 			body.cbTypes.add(collisionType);
 			body.cbTypes.add(ObjMob.collisionType);
 			body.group = ObjMob.group;
@@ -99,15 +118,68 @@ package dk.sebb.tiled.mobs.creatures
 			Level.space.listeners.add(onBulletListener);
 			
 			hasPerspective = true;
+			
+			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
+		protected function drawHealthbar():void {
+			//add healthbar
+			var bg:Shape = new Shape();
+			bg.graphics.beginFill(0x999999);
+			bg.graphics.drawRect(-animator.width/2, -2, animator.width, -1);
+			bg.graphics.endFill();
+			healthBar.addChild(bg);
+			
+			healthBar.red = new Shape();
+			healthBar.red.graphics.beginFill(0xC22D00);
+			healthBar.red.graphics.drawRect(-animator.width/2, -2, animator.width, -1);
+			healthBar.red.graphics.endFill();
+			healthBar.addChild(healthBar.red);
+			
+			healthBar.visible = false;
+			addChild(healthBar);
+		}
+		
+		protected function onAddedToStage(evt:Event):void {
+			parent.addChild(portal);
+			portal.x = body.position.x;
+			portal.y = body.position.y;
+			
+			portal.scaleX = portal.scaleY = 0;
+			TweenLite.to(portal, 0.5, {scaleX:1, scaleY:1});
+			
+			setTimeout(function():void {
+				if(portal.parent) {
+					TweenLite.to(portal, 0.4, {scaleX:0, scaleY:0});
+					
+					setTimeout(function():void {
+						portal.parent.removeChild(portal);
+					}, 400)
+				}
+			}, 2000 + Math.random() * 1000);
+		}		
+		
+		
 		public function onBullehit(collision:InteractionCallback):void {
-			damage(2);
+			if(!portal.parent) {//immortal while they are portaling in
+				damage(3);
+			}
 		}
 		
 		public function damage(amount:int = 1):void {
 			health -= amount;
 			lastHit = getTimer();
+			
+			this.filters = this.filters ? this.filters:[];
+			var originalFilters:Array =  this.filters.concat();
+			filters = this.filters.concat([new GlowFilter()]);
+			setTimeout(function():void {
+				filters = originalFilters;
+			}, 200);
+			
+			lastDamage = getTimer();
+			healthBar.visible = true;
+			healthBar.red.width = width * (_health/maxHealth);
 		}
 		
 		public function get health():int {
@@ -130,7 +202,13 @@ package dk.sebb.tiled.mobs.creatures
 			if(object.onEnter) {
 				Level.lua.doString(object.onEnter);
 			} else {
-				Level.player.damage();
+				if(isAttacking) {
+					Level.player.damage();
+					//var pushDirection:Vec2 = Level.player.body.position.sub(body.position);
+					//pushDirection.length = 10;
+					//Level.player.body.position = Level.player.body.position.add(pushDirection)
+					isAttacking = false;
+				}
 			}
 			
 			playerInProximity = true;
@@ -171,7 +249,45 @@ package dk.sebb.tiled.mobs.creatures
 			}
 		}
 		
+		public function handleAttack():void {
+			if(getTimer() - lastAttack < attackCooldown) {
+				return;
+			}
+			
+			var withinRange:Boolean = Vec2.distance(body.position,  Level.player.body.position) < 16;
+			if(withinRange) {
+				isAttacking = true;
+				var matrix:Array = new Array();
+
+				matrix=matrix.concat([0,2,0,0,-40]);// red
+				matrix=matrix.concat([0,1,0,0,-40]);// green
+				matrix=matrix.concat([0,1,0,0,-40]);// blue
+				matrix=matrix.concat([0,0,0,1,0]);// alpha
+				
+				this.filters = this.filters ? this.filters:[];
+				var originalFilters:Array =  this.filters.concat();
+				
+				filters = [new ColorMatrixFilter(matrix)];
+				speed *= 1.1;
+				setTimeout(function():void {
+					speed = speed/1.1;
+					filters = originalFilters;
+					isAttacking = false;
+				}, 300);
+				
+				lastAttack = getTimer();
+			}
+		}
+		
 		public override function update():void {
+			if(portal.parent) {
+				return;
+			}
+			
+			if(getTimer() - lastDamage > 3000) {
+				healthBar.visible = false;
+			}
+			
 			super.update();
 			
 			var vec:Vec2 = body.localVectorToWorld(new Vec2(0, 0));
@@ -182,9 +298,9 @@ package dk.sebb.tiled.mobs.creatures
 				findPath();
 			}
 			
-			if(Vec2.distance(body.position,  Level.player.body.position) < 16) {//change
+			if(Vec2.distance(body.position,  Level.player.body.position) < 32) {//change
 				vec = Level.player.body.position.sub(body.position);
-				vec.length = 50;
+				vec.length = speed;
 			} else if(path && path.length > 0) {//continue down the current path if we have a path
 				if(Vec2.distance(body.position,  path[0]) < 16) {
 					path.shift();
@@ -235,6 +351,8 @@ package dk.sebb.tiled.mobs.creatures
 					setAnimation('vertical');
 				}
 			}
+			
+			handleAttack();
 		}
 		
 		public function setAnimation(name:String):void {

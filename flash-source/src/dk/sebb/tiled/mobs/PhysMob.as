@@ -18,7 +18,7 @@ package dk.sebb.tiled.mobs
 		
 		public override function update():void {
 			x = body.position.x;
-			y = body.position.y - height;
+			y = body.position.y - (animator ? animator.height:0);
 			rotation = body.rotation * 180 / Math.PI;
 			super.update();
 		} 

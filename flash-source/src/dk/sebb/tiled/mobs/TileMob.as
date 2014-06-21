@@ -1,5 +1,6 @@
 package dk.sebb.tiled.mobs
 {
+	import nape.callbacks.CbType;
 	import nape.geom.Vec2;
 	import nape.phys.Body;
 	import nape.phys.BodyType;
@@ -10,6 +11,8 @@ package dk.sebb.tiled.mobs
 		public var size:int;
 		public var color:uint;
 		
+		public static var collisionType:CbType = new CbType();
+		
 		public function TileMob(type:BodyType, size:int = 32, color:uint = 0x0000FF)
 		{
 			super(type);
@@ -18,7 +21,7 @@ package dk.sebb.tiled.mobs
 			body = new Body(type || BodyType.DYNAMIC, new Vec2(0, 0));
 			poly = new Polygon(Polygon.box(size,size));
 			body.shapes.add(poly);
-			body.cbTypes.add(ObjMob.collisionType);
+			body.cbTypes.add(collisionType);
 			body.group = ObjMob.group;
 			
 			draw();
