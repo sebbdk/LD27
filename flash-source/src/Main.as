@@ -23,7 +23,7 @@ package
 		public var level:Level;
 		public var levels:Array = [
 			//'../../levels/level01/'
-			'http://sebbdk.github.io/LD27/levels/level01/'
+			'http://static.sebb.dk/ld27/levels/level01/'
 		];
 	
 		public static var healthbar:MovieClip;

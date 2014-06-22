@@ -165,7 +165,7 @@ package dk.sebb.tiled.mobs.creatures
 			var kx:int = 0;
 			var ky:int = 0;
 			
-			var vel:int = 80;
+			var vel:int = 50;
 			
 			if(Key.isDown(Keyboard.D)) {
 				kx += vel;
