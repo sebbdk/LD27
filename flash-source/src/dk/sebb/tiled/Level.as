@@ -259,8 +259,8 @@ package dk.sebb.tiled
 				}
 				
 				//move "camera" onto player
-				actualX = lerp( 0.5 , actualX, -(player.body.position.x * scaleX) + stage.stageWidth/2);
-				actualY = lerp( 0.5 , actualY, -(player.body.position.y * scaleY) + stage.stageHeight/2);
+				actualX = lerp( 0.3 , actualX, -(player.body.position.x * scaleX) + stage.stageWidth/2);
+				actualY = lerp( 0.3 , actualY, -(player.body.position.y * scaleY) + stage.stageHeight/2);
 				x = actualX + screenShake.offSetX;
 				y = actualY + screenShake.offSetY;
 					
